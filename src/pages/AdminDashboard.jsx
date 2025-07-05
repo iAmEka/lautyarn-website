@@ -1,14 +1,13 @@
-// src/pages/DashboardAdmin.jsx
+// src/pages/AdminDashboard.jsx
 import React, { useEffect, useState } from 'react';
 import { Container, Row, Col, Button, Modal, Form } from 'react-bootstrap';
 import { BsPlus, BsPencil, BsTrash, BsArrowLeft } from 'react-icons/bs';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import '../styles/profile-ghibli.css';
 
 const API_BASE_URL = 'https://lautyarn-api-nixpacksstartcmd.up.railway.app';
 
-const DashboardAdmin = ({ user }) => {
+const AdminDashboard = ({ user }) => {
   const navigate = useNavigate();
   const [rajutanList, setRajutanList] = useState([]);
   const [showModal, setShowModal] = useState(false);
@@ -18,10 +17,12 @@ const DashboardAdmin = ({ user }) => {
 
   const fetchRajutan = async () => {
     try {
-      const res = await axios.get(`${API_BASE_URL}/rajutan`);
-      setRajutanList(res.data);
+      const response = await fetch(`${API_BASE_URL}/rajutan/?skip=0&limit=100`);
+      if (!response.ok) throw new Error('Gagal memuat rajutan');
+      const data = await response.json();
+      setRajutanList(data);
     } catch (err) {
-      console.error(err);
+      console.error('Error fetchRajutan:', err);
     }
   };
 
@@ -43,33 +44,47 @@ const DashboardAdmin = ({ user }) => {
   };
 
   const handleSave = async () => {
+    const method = editMode ? 'PUT' : 'POST';
+    const url = editMode
+      ? `${API_BASE_URL}/rajutan/${selectedId}`
+      : `${API_BASE_URL}/rajutan`;
+
     try {
-      if (editMode) {
-        await axios.put(`${API_BASE_URL}/rajutan/${selectedId}`, currentRajutan);
-      } else {
-        await axios.post(`${API_BASE_URL}/rajutan`, currentRajutan);
-      }
+      const response = await fetch(url, {
+        method,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(currentRajutan),
+      });
+      if (!response.ok) throw new Error('Gagal menyimpan rajutan');
       setShowModal(false);
       fetchRajutan();
     } catch (err) {
-      console.error(err);
+      console.error('Error handleSave:', err);
     }
   };
 
   const handleDelete = async (id) => {
-    if (window.confirm('Yakin ingin menghapus rajutan ini?')) {
-      try {
-        await axios.delete(`${API_BASE_URL}/rajutan/${id}`);
-        fetchRajutan();
-      } catch (err) {
-        console.error(err);
-      }
+    if (!window.confirm('Yakin ingin menghapus rajutan ini?')) return;
+    try {
+      const response = await fetch(`${API_BASE_URL}/rajutan/${id}`, {
+        method: 'DELETE',
+      });
+      if (!response.ok) throw new Error('Gagal menghapus rajutan');
+      fetchRajutan();
+    } catch (err) {
+      console.error('Error handleDelete:', err);
     }
   };
 
   return (
     <div className="ghibli-profile-bg min-vh-100 py-4 px-3 px-md-5">
-      <Button variant="link" className="text-decoration-none ghibli-back-btn mb-4" onClick={() => navigate('/')}> <BsArrowLeft className="me-1" /> Kembali </Button>
+      <Button
+        variant="link"
+        className="text-decoration-none ghibli-back-btn mb-4"
+        onClick={() => navigate('/')}
+      >
+        <BsArrowLeft className="me-1" /> Kembali
+      </Button>
 
       <h2 className="ghibli-font text-center mb-4">Dashboard Admin</h2>
 
@@ -83,16 +98,38 @@ const DashboardAdmin = ({ user }) => {
       <Container>
         <div className="d-flex justify-content-between align-items-center mb-3">
           <h5 className="fw-semibold">Daftar Rajutan</h5>
-          <Button onClick={() => handleShowModal()} className="ghibli-edit-btn rounded-pill px-3"><BsPlus className="me-1" />Tambah</Button>
+          <Button onClick={() => navigate('/admin-dashboard/create')} className="ghibli-edit-btn rounded-pill px-3">
+            <BsPlus className="me-1" />Tambah
+          </Button>
+
+
         </div>
 
         {rajutanList.map((item) => (
-          <Row key={item.id} className="border-bottom py-2 align-items-center">
-            <Col xs={12} md={4}><strong>{item.nama}</strong></Col>
-            <Col xs={12} md={5}>{item.deskripsi}</Col>
+          <Row key={item.id} className="border-bottom py-3 align-items-center">
+            <Col xs={12} md={2}>
+              {item.url_gambar && (
+                <img src={item.url_gambar} alt={item.nama} className="img-fluid rounded shadow-sm" style={{ maxHeight: '80px' }} />
+              )}
+            </Col>
+            <Col xs={12} md={3}><strong>{item.nama}</strong></Col>
+            <Col xs={12} md={4}>{item.deskripsi}</Col>
             <Col xs={12} md={3} className="text-md-end mt-2 mt-md-0">
-              <Button variant="outline-primary" size="sm" className="me-2" onClick={() => handleShowModal(item)}><BsPencil /></Button>
-              <Button variant="outline-danger" size="sm" onClick={() => handleDelete(item.id)}><BsTrash /></Button>
+              <Button
+                variant="outline-primary"
+                size="sm"
+                className="me-2"
+                onClick={() => handleShowModal(item)}
+              >
+                <BsPencil />
+              </Button>
+              <Button
+                variant="outline-danger"
+                size="sm"
+                onClick={() => handleDelete(item.id)}
+              >
+                <BsTrash />
+              </Button>
             </Col>
           </Row>
         ))}
@@ -132,4 +169,4 @@ const DashboardAdmin = ({ user }) => {
   );
 };
 
-export default DashboardAdmin;
+export default AdminDashboard;

@@ -1,4 +1,4 @@
-/* lautyarn-website/src/index.css */
+/* lautyarn-website/src/index.css
 body {
   margin: 0;
   font-family: Arial, sans-serif;
@@ -14,7 +14,6 @@ body {
   display: flex;
   flex-direction: column;
 }
-/* Ghibli hover nav link */
 .nav-link-ghibli {
   color: #2E4F4F !important;
   transition: all 0.3s ease;
@@ -23,11 +22,10 @@ body {
 
 .nav-link-ghibli:hover,
 .nav-link-ghibli.active {
-  color: #5C7AEA !important; /* Soft blue ala Ghibli sky */
+  color: #5C7AEA !important; 
   text-shadow: 0 0 3px rgba(92, 122, 234, 0.4);
 }
 
-/* Optional: add bottom border on active or hover */
 .nav-link-ghibli::after {
   content: '';
   display: block;
@@ -41,4 +39,4 @@ body {
 .nav-link-ghibli:hover::after,
 .nav-link-ghibli.active::after {
   width: 100%;
-}
+} */

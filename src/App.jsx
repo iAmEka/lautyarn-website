@@ -14,7 +14,8 @@ import Profile from './pages/Profile';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import UpdateProfile from './pages/UpdateProfile';
-
+import AdminDashboard from './pages/AdminDashboard';
+import CreateRajutan from './pages/rajutan/CreateRajutan';
 
 const API_BASE_URL = 'https://lautyarn-api-nixpacksstartcmd.up.railway.app';
 
@@ -22,7 +23,7 @@ function App() {
   const [user, setUser] = useState(null);
   const [userRole, setUserRole] = useState('guest');
   const [loading, setLoading] = useState(true);
-  const location = useLocation(); // Cek path saat ini
+  const location = useLocation();
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
@@ -67,7 +68,6 @@ function App() {
     localStorage.removeItem('userRole');
   };
 
-  // Navbar tidak ditampilkan di halaman-halaman ini
   const hideNavbarRoutes = ['/profile', '/update-profile'];
   const shouldShowNavbar = !hideNavbarRoutes.includes(location.pathname);
 
@@ -92,6 +92,22 @@ function App() {
 
         <Route path="/login" element={<LoginPage onLogin={handleLogin} />} />
         <Route path="/register" element={<RegisterPage />} />
+        <Route
+            path="/rajutan/create"
+            element={
+              <ProtectedRoute user={user} userRole={userRole} requiredRole="admin">
+                <CreateRajutan />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin-dashboard/create"
+            element={
+              <ProtectedRoute user={user} userRole={userRole} requiredRole="admin">
+                <CreateRajutan />
+              </ProtectedRoute>
+            }
+          />
 
         <Route
           path="/profile"
@@ -107,6 +123,15 @@ function App() {
           element={
             <ProtectedRoute user={user}>
               <UpdateProfile user={user} />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/admin-dashboard"
+          element={
+            <ProtectedRoute user={user} userRole={userRole} requiredRole="admin">
+              <AdminDashboard user={user} />
             </ProtectedRoute>
           }
         />

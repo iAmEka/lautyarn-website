@@ -20,7 +20,7 @@ const Navbar = ({ user, userRole, onLogout }) => {
   };
 
   return (
-    <RBNavbar expand="lg" className="ghibli-navbar sticky-top py-2">
+    <RBNavbar expand="lg" className="ghibli-navbar fixed-top">
       <Container fluid className="px-4">
         {/* Brand Lautyarn */}
         <RBNavbar.Brand as={Link} to="/" className="ghibli-brand">
@@ -35,16 +35,30 @@ const Navbar = ({ user, userRole, onLogout }) => {
         {/* Collapse Menu */}
         <RBNavbar.Collapse id="navbar-nav" className="justify-content-center">
           <Nav className="mx-auto ghibli-nav-center">
-            <Nav.Link as={Link} to="/store" className="nav-link-ghibli">
-              Store
-            </Nav.Link>
+            {userRole !== 'admin' && (
+              <Nav.Link as={Link} to="/store" className="nav-link-ghibli">
+                Store
+              </Nav.Link>
+            )}
             <Nav.Link as={Link} to="/about" className="nav-link-ghibli">
               About
             </Nav.Link>
+
             {user && userRole === 'customer' && (
               <Nav.Link as={Link} to="/favorite" className="nav-link-ghibli">
                 Favorite
               </Nav.Link>
+            )}
+
+            {user && userRole === 'admin' && (
+              <>
+                <Nav.Link as={Link} to="/admin-dashboard" className="nav-link-ghibli">
+                  Dashboard
+                </Nav.Link>
+                <Nav.Link as={Link} to="/history" className="nav-link-ghibli">
+                  History
+                </Nav.Link>
+              </>
             )}
           </Nav>
 
@@ -61,13 +75,9 @@ const Navbar = ({ user, userRole, onLogout }) => {
                     {userRole === 'customer' && (
                       <Dropdown.Item as={Link} to="/mydashboard">My Dashboard</Dropdown.Item>
                     )}
-                    {userRole === 'admin' && (
-                      <>
-                        <Dropdown.Item as={Link} to="/dashboard-admin">Dashboard</Dropdown.Item>
 
-                        <Dropdown.Item as={Link} to="/history">History</Dropdown.Item>
-                      </>
-                    )}
+                    {/* Admin tidak lagi menampilkan dashboard/history di dropdown */}
+
                     <Dropdown.Item as={Link} to="/profile">Profile</Dropdown.Item>
                     <Dropdown.Divider />
                     <Dropdown.Item onClick={handleLogout}>Logout</Dropdown.Item>

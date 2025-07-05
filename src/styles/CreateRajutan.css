@@ -1,0 +1,118 @@
+/* src/styles/CreateRajutan.css */
+
+.ghibli-background {
+  background: linear-gradient(to bottom, #d8f3dc, #b7e4c7);
+  min-height: 100vh;
+  padding-top: 50px;
+  font-family: 'Quicksand', 'Segoe UI', sans-serif;
+  background-image: url('https://www.transparenttextures.com/patterns/foggy-birds.png');
+  background-repeat: repeat;
+  background-size: contain;
+  color: #2f3e46;
+}
+
+.ghibli-form-container {
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 16px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  padding: 40px;
+}
+
+.ghibli-title {
+  font-weight: bold;
+  font-size: 32px;
+  color: #1b4332;
+}
+
+.ghibli-label {
+  font-weight: 600;
+  color: #2d6a4f;
+}
+
+.ghibli-image-placeholder {
+  width: 100%;
+  height: 400px;
+  border: 2px dashed #a5a58d;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #6c757d;
+  background-color: #fefae0;
+  font-style: italic;
+}
+
+button.btn-primary {
+  background-color: #588157;
+  border: none;
+}
+
+button.btn-primary:hover {
+  background-color: #3a5a40;
+}
+
+button.btn-secondary {
+  background-color: #cad2c5;
+  border: none;
+  color: #344e41;
+}
+
+button.btn-secondary:hover {
+  background-color: #a3b18a;
+  color: white;
+}
+
+textarea.form-control,
+input.form-control,
+select.form-select {
+  border-radius: 10px;
+  border: 1px solid #ced4da;
+  transition: all 0.2s ease;
+}
+
+input.form-control:focus,
+select.form-select:focus,
+textarea.form-control:focus {
+  border-color: #95d5b2;
+  box-shadow: 0 0 0 0.25rem rgba(144, 238, 144, 0.25);
+}
+
+.ghibli-more-transparent-90 {
+  background-color: rgba(255, 255, 255, 0.1); /* 90% transparan */
+  padding: 30px;
+  border-radius: 16px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  backdrop-filter: blur(6px);
+}
+.ghibli-image-preview {
+  width: 100%;
+  height: 420px;
+  border: 2px dashed #b3b3cc;
+  border-radius: 12px;
+  background-color: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.ghibli-image-preview-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+.ghibli-image-placeholder {
+  font-family: 'Berkshire Swash', cursive;
+  font-size: 1.1rem;
+  color: #5C7AEA;
+  text-align: center;
+  padding: 1.5rem;
+  opacity: 0.7;
+}
+
+

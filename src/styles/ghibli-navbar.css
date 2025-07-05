@@ -1,11 +1,18 @@
 @import url('https://fonts.googleapis.com/css2?family=Berkshire+Swash&display=swap');
 
 .ghibli-navbar {
+  position: fixed; /* agar mengambang */
+  top: 0;
+  left: 0;
+  width: 100%;
+
+  z-index: 1050; 
   background-color: rgba(255, 255, 255, 0.7);
   backdrop-filter: blur(12px);
   font-family: 'Berkshire Swash', cursive;
   border-bottom: 1px solid #eee;
 }
+
 
 .ghibli-brand {
   font-size: 1.8rem;

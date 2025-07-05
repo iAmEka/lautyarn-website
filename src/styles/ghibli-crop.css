@@ -1,0 +1,39 @@
+@import url('https://fonts.googleapis.com/css2?family=Berkshire+Swash&display=swap');
+
+.ghibli-crop-container {
+  font-family: 'Berkshire Swash', cursive;
+}
+
+.ghibli-label {
+  font-size: 1.2rem;
+  color: #2E4F4F;
+}
+
+.ghibli-input {
+  border: 2px solid #ccc;
+  border-radius: 8px;
+}
+
+.ghibli-modal-header, .ghibli-modal-footer {
+  background-color: #fefefe;
+}
+
+.ghibli-modal-title {
+  font-family: 'Berkshire Swash', cursive;
+  color: #5C7AEA;
+}
+
+.ghibli-modal-body {
+  background-color: #fdfdfd;
+}
+
+.ghibli-button {
+  font-family: 'Berkshire Swash', cursive;
+  background-color: #5C7AEA;
+  border: none;
+  transition: background-color 0.3s ease;
+}
+
+.ghibli-button:hover {
+  background-color: #3b5bdb;
+}
