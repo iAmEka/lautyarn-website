@@ -1,0 +1,40 @@
+@import url('https://fonts.googleapis.com/css2?family=Berkshire+Swash&display=swap');
+
+:root {
+  --ghibli-bg: #eef8f5;
+  --ghibli-soft: #2E4F4F;
+  --ghibli-accent: #5C7AEA;
+}
+
+.ghibli-profile-bg {
+  background-color: var(--ghibli-bg);
+  min-height: 100vh;
+  font-family: 'Quicksand', sans-serif;
+  color: var(--ghibli-soft);
+}
+
+.ghibli-font {
+  font-family: 'Berkshire Swash', cursive;
+  color: var(--ghibli-soft);
+}
+
+.ghibli-back-btn {
+  color: var(--ghibli-accent);
+  font-weight: 500;
+}
+
+.ghibli-back-btn:hover {
+  text-decoration: underline;
+  color: #3d5bd3;
+}
+
+.ghibli-edit-btn {
+  border-color: var(--ghibli-accent);
+  color: var(--ghibli-accent);
+  transition: all 0.3s ease;
+}
+
+.ghibli-edit-btn:hover {
+  background-color: var(--ghibli-accent);
+  color: white;
+}

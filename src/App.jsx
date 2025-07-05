@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, useLocation } from 'react-router-dom';
 import { auth } from './config/firebase';
 import { onAuthStateChanged } from 'firebase/auth';
 
@@ -19,6 +19,7 @@ function App() {
   const [user, setUser] = useState(null);
   const [userRole, setUserRole] = useState('guest');
   const [loading, setLoading] = useState(true);
+  const location = useLocation(); // untuk cek path saat ini
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
@@ -31,7 +32,6 @@ function App() {
             setUserRole(data.role);
             localStorage.setItem('userRole', data.role);
           } else {
-            // Firebase login tapi belum register → treat as guest
             setUser(null);
             setUserRole('guest');
             localStorage.removeItem('userRole');
@@ -64,6 +64,11 @@ function App() {
     localStorage.removeItem('userRole');
   };
 
+  // Sembunyikan navbar di halaman /profile
+  const hideNavbarRoutes = ['/profile'];
+
+  const shouldShowNavbar = !hideNavbarRoutes.includes(location.pathname);
+
   if (loading) {
     return (
       <div className="d-flex justify-content-center align-items-center" style={{ minHeight: '100vh' }}>
@@ -74,10 +79,12 @@ function App() {
 
   return (
     <>
-      <Navbar user={user} userRole={userRole} onLogout={handleLogout} />
+      {shouldShowNavbar && (
+        <Navbar user={user} userRole={userRole} onLogout={handleLogout} />
+      )}
+
       <Routes>
         <Route path="/" element={<Home user={user} userRole={userRole} />} />
-        {/* Kirim user dan userRole ke Store */}
         <Route path="/store" element={<Store user={user} userRole={userRole} />} />
         <Route path="/about" element={<About />} />
 
