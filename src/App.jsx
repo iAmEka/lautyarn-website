@@ -15,6 +15,7 @@ import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import UpdateProfile from './pages/UpdateProfile';
 
+
 const API_BASE_URL = 'https://lautyarn-api-nixpacksstartcmd.up.railway.app';
 
 function App() {

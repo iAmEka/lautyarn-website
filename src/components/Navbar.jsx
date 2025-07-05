@@ -63,7 +63,8 @@ const Navbar = ({ user, userRole, onLogout }) => {
                     )}
                     {userRole === 'admin' && (
                       <>
-                        <Dropdown.Item as={Link} to="/DashboardAdmin">Dashboard</Dropdown.Item>
+                        <Dropdown.Item as={Link} to="/dashboard-admin">Dashboard</Dropdown.Item>
+
                         <Dropdown.Item as={Link} to="/history">History</Dropdown.Item>
                       </>
                     )}
