@@ -1,3 +1,4 @@
+// src/App.jsx
 import React, { useState, useEffect } from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
 import { auth } from './config/firebase';
@@ -12,6 +13,7 @@ import About from './pages/About';
 import Profile from './pages/Profile';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
+import UpdateProfile from './pages/UpdateProfile';
 
 const API_BASE_URL = 'https://lautyarn-api-nixpacksstartcmd.up.railway.app';
 
@@ -19,7 +21,7 @@ function App() {
   const [user, setUser] = useState(null);
   const [userRole, setUserRole] = useState('guest');
   const [loading, setLoading] = useState(true);
-  const location = useLocation(); // untuk cek path saat ini
+  const location = useLocation(); // Cek path saat ini
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
@@ -64,9 +66,8 @@ function App() {
     localStorage.removeItem('userRole');
   };
 
-  // Sembunyikan navbar di halaman /profile
-  const hideNavbarRoutes = ['/profile'];
-
+  // Navbar tidak ditampilkan di halaman-halaman ini
+  const hideNavbarRoutes = ['/profile', '/update-profile'];
   const shouldShowNavbar = !hideNavbarRoutes.includes(location.pathname);
 
   if (loading) {
@@ -96,6 +97,15 @@ function App() {
           element={
             <ProtectedRoute user={user}>
               <Profile user={user} userRole={userRole} />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/update-profile"
+          element={
+            <ProtectedRoute user={user}>
+              <UpdateProfile user={user} />
             </ProtectedRoute>
           }
         />
