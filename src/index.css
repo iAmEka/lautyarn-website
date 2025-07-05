@@ -1,0 +1,44 @@
+/* lautyarn-website/src/index.css */
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  box-sizing: border-box;
+}
+
+*, *::before, *::after {
+  box-sizing: inherit;
+}
+
+#root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+/* Ghibli hover nav link */
+.nav-link-ghibli {
+  color: #2E4F4F !important;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.nav-link-ghibli:hover,
+.nav-link-ghibli.active {
+  color: #5C7AEA !important; /* Soft blue ala Ghibli sky */
+  text-shadow: 0 0 3px rgba(92, 122, 234, 0.4);
+}
+
+/* Optional: add bottom border on active or hover */
+.nav-link-ghibli::after {
+  content: '';
+  display: block;
+  width: 0;
+  height: 2px;
+  background: #5C7AEA;
+  transition: width 0.3s;
+  margin-top: 2px;
+}
+
+.nav-link-ghibli:hover::after,
+.nav-link-ghibli.active::after {
+  width: 100%;
+}

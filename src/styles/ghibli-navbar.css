@@ -1,0 +1,124 @@
+@import url('https://fonts.googleapis.com/css2?family=Berkshire+Swash&display=swap');
+
+.ghibli-navbar {
+  background-color: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(12px);
+  font-family: 'Berkshire Swash', cursive;
+  border-bottom: 1px solid #eee;
+}
+
+.ghibli-brand {
+  font-size: 1.8rem;
+  color: #2E4F4F !important;
+  margin-left: 1rem; /* Space from left edge */
+}
+
+.ghibli-brand:hover,
+.ghibli-brand.active {
+  color: #5C7AEA !important;
+}
+
+/* Ghibli-style nav link */
+.nav-link-ghibli {
+  color: #2E4F4F !important;
+  position: relative;
+  font-size: 1.05rem;
+  padding-left: 1.5rem; /* Increased spacing */
+  padding-right: 1.5rem;
+}
+
+.nav-link-ghibli:hover,
+.nav-link-ghibli.active {
+  color: #5C7AEA !important;
+}
+
+.nav-link-ghibli::after {
+  content: '';
+  display: block;
+  width: 0;
+  height: 2px;
+  background: #5C7AEA;
+  margin-top: 2px;
+}
+
+.nav-link-ghibli:hover::after,
+.nav-link-ghibli.active::after {
+  width: 100%;
+}
+
+/* Center nav items with more spacing */
+.ghibli-nav-center {
+  display: flex;
+  gap: 2.5rem; /* Increased gap between nav items */
+}
+
+/* Dropdown toggle tanpa panah */
+.ghibli-menu-toggle {
+  padding: 6px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  background: transparent;
+  margin-right: 1rem; /* Space from right edge */
+}
+
+.ghibli-menu-icon {
+  font-size: 28px;
+  color: #2E4F4F;
+}
+
+.ghibli-menu-toggle:hover .ghibli-menu-icon {
+  color: #5C7AEA;
+}
+
+/* Dropdown Menu */
+.ghibli-dropdown-menu .dropdown-item {
+  font-family: 'Berkshire Swash', cursive;
+  font-size: 1rem;
+  color: #2E4F4F;
+  transition: all 0.3s ease;
+}
+
+.ghibli-dropdown-menu .dropdown-item:hover {
+  background-color: rgba(92, 122, 234, 0.1);
+  color: #5C7AEA;
+}
+
+/* Hilangkan panah dropdown Bootstrap */
+.dropdown-toggle::after {
+  display: none !important;
+}
+/* Smooth Scroll Behavior */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Ghibli-style Scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: rgba(92, 122, 234, 0.35); /* Ghibli Sky Blue Soft */
+  border-radius: 20px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+  transition: background-color 0.3s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(92, 122, 234, 0.6);
+}
+
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+/* For Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(92, 122, 234, 0.4) transparent;
+}
