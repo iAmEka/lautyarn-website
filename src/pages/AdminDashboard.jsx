@@ -7,30 +7,40 @@ import RajutanTable from '../components/admindashboard/RajutanTable';
 import SidebarMenu from '../components/admindashboard/SidebarMenu';
 import AdminInfoCard from '../components/admindashboard/AdminInfoCard';
 import RajutanModal from '../components/admindashboard/RajutanModal';
+import GhibliLoader from '../components/GhibliLoader';
+import TypeTable from '../components/admindashboard/TypeTable';
+
 
 const API_BASE_URL = 'https://lautyarn-api-nixpacksstartcmd.up.railway.app';
 
 const AdminDashboard = ({ user }) => {
   const navigate = useNavigate();
+
+  // State
   const [activeView, setActiveView] = useState('rajutan');
   const [rajutanList, setRajutanList] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [editMode, setEditMode] = useState(false);
   const [currentRajutan, setCurrentRajutan] = useState({ nama: '', deskripsi: '' });
   const [selectedId, setSelectedId] = useState(null);
 
+  // Fetch data saat pertama kali
   useEffect(() => {
     fetchRajutan();
   }, []);
 
   const fetchRajutan = async () => {
     try {
+      setIsLoading(true);
       const response = await fetch(`${API_BASE_URL}/rajutan/?skip=0&limit=100`);
       if (!response.ok) throw new Error('Gagal memuat rajutan');
       const data = await response.json();
       setRajutanList(data);
     } catch (err) {
       console.error('Error fetchRajutan:', err);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -98,19 +108,22 @@ const AdminDashboard = ({ user }) => {
   };
 
   const renderContent = () => {
+    if (isLoading && activeView === 'rajutan') return <GhibliLoader />;
+
     if (activeView === 'rajutan') {
       return (
         <>
           <div className="d-flex justify-content-between align-items-center mb-3">
             <h5 className="fw-bold text-secondary mb-0">🧵 Daftar Rajutan</h5>
             <Button
-              onClick={() => handleShowModal()}
+              onClick={() => navigate('/rajutan/create')}
               variant="outline-warning"
               size="sm"
             >
               <BsPlus /> Tambah
             </Button>
           </div>
+
           <RajutanTable
             items={rajutanList}
             onEdit={handleShowModal}
@@ -121,12 +134,17 @@ const AdminDashboard = ({ user }) => {
       );
     }
 
+    if (activeView === 'type_rajutan') {
+      return <TypeTable />;
+    }
+
     return (
       <div className="text-center text-muted small mt-4">
         <p><strong>{activeView.toUpperCase()}</strong> belum tersedia</p>
       </div>
     );
   };
+
 
   return (
     <div className="py-4 px-3 bg-light min-vh-100">

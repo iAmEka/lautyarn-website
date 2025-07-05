@@ -147,21 +147,20 @@ const UpdateRajutan = () => {
               <Form.Group className="mb-3">
                 <Form.Label className="ghibli-label">Jumlah Like</Form.Label>
                 <Form.Control
-                  type="number"
-                  value={countLike}
-                  onChange={(e) => setCountLike(e.target.value)}
-                  min="0"
-                />
+                    type="number"
+                    value={countLike}
+                    readOnly
+                    />
               </Form.Group>
 
               <Form.Group className="mb-3">
                 <Form.Label className="ghibli-label">Jumlah Favorite</Form.Label>
                 <Form.Control
-                  type="number"
-                  value={countFavorite}
-                  onChange={(e) => setCountFavorite(e.target.value)}
-                  min="0"
-                />
+                    type="number"
+                    value={countFavorite}
+                    readOnly
+                    />
+
               </Form.Group>
 
               <Form.Group className="mb-3">

@@ -8,7 +8,7 @@ const SidebarMenu = ({ activeView, setActiveView }) => {
     { key: 'customer', label: '👥 Customer' },
     { key: 'pesanan', label: '📦 Pesanan' },
     { key: 'admin', label: '👮 Admin' },
-    { key: 'tipe', label: '🛠️ Tipe Rajutan' },
+    { key: 'type_rajutan', label: '🛠️ Tipe Rajutan' },
   ];
 
   return (
