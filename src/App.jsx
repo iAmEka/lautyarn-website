@@ -16,6 +16,7 @@ import RegisterPage from './pages/RegisterPage';
 import UpdateProfile from './pages/UpdateProfile';
 import AdminDashboard from './pages/AdminDashboard';
 import CreateRajutan from './pages/rajutan/CreateRajutan';
+import UpdateRajutan from './pages/rajutan/UpdateRajutan';
 
 const API_BASE_URL = 'https://lautyarn-api-nixpacksstartcmd.up.railway.app';
 
@@ -88,6 +89,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Home user={user} userRole={userRole} />} />
         <Route path="/store" element={<Store user={user} userRole={userRole} />} />
+        <Route path="/admin-dashboard/rajutan/edit/:id" element={<UpdateRajutan />} />
         <Route path="/about" element={<About />} />
 
         <Route path="/login" element={<LoginPage onLogin={handleLogin} />} />

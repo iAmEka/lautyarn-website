@@ -1,19 +1,27 @@
-// src/pages/AdminDashboard.jsx
 import React, { useEffect, useState } from 'react';
-import { Container, Row, Col, Button, Modal, Form } from 'react-bootstrap';
-import { BsPlus, BsPencil, BsTrash, BsArrowLeft } from 'react-icons/bs';
+import { Container, Row, Col, Button } from 'react-bootstrap';
+import { BsArrowLeft, BsPlus } from 'react-icons/bs';
 import { useNavigate } from 'react-router-dom';
-import '../styles/profile-ghibli.css';
+
+import RajutanTable from '../components/admindashboard/RajutanTable';
+import SidebarMenu from '../components/admindashboard/SidebarMenu';
+import AdminInfoCard from '../components/admindashboard/AdminInfoCard';
+import RajutanModal from '../components/admindashboard/RajutanModal';
 
 const API_BASE_URL = 'https://lautyarn-api-nixpacksstartcmd.up.railway.app';
 
 const AdminDashboard = ({ user }) => {
   const navigate = useNavigate();
+  const [activeView, setActiveView] = useState('rajutan');
   const [rajutanList, setRajutanList] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [editMode, setEditMode] = useState(false);
   const [currentRajutan, setCurrentRajutan] = useState({ nama: '', deskripsi: '' });
   const [selectedId, setSelectedId] = useState(null);
+
+  useEffect(() => {
+    fetchRajutan();
+  }, []);
 
   const fetchRajutan = async () => {
     try {
@@ -25,10 +33,6 @@ const AdminDashboard = ({ user }) => {
       console.error('Error fetchRajutan:', err);
     }
   };
-
-  useEffect(() => {
-    fetchRajutan();
-  }, []);
 
   const handleShowModal = (rajutan = null) => {
     if (rajutan) {
@@ -76,95 +80,87 @@ const AdminDashboard = ({ user }) => {
     }
   };
 
+  const handleToggleStatus = async (item) => {
+    const newStatus = item.status === 'ready' ? 'pre_order' : 'ready';
+    const updatedData = { ...item, status: newStatus };
+
+    try {
+      const response = await fetch(`${API_BASE_URL}/rajutan/${item.id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(updatedData),
+      });
+      if (!response.ok) throw new Error('Gagal mengubah status');
+      fetchRajutan();
+    } catch (err) {
+      console.error('Error toggle status:', err);
+    }
+  };
+
+  const renderContent = () => {
+    if (activeView === 'rajutan') {
+      return (
+        <>
+          <div className="d-flex justify-content-between align-items-center mb-3">
+            <h5 className="fw-bold text-secondary mb-0">🧵 Daftar Rajutan</h5>
+            <Button
+              onClick={() => handleShowModal()}
+              variant="outline-warning"
+              size="sm"
+            >
+              <BsPlus /> Tambah
+            </Button>
+          </div>
+          <RajutanTable
+            items={rajutanList}
+            onEdit={handleShowModal}
+            onDelete={handleDelete}
+            onToggleStatus={handleToggleStatus}
+          />
+        </>
+      );
+    }
+
+    return (
+      <div className="text-center text-muted small mt-4">
+        <p><strong>{activeView.toUpperCase()}</strong> belum tersedia</p>
+      </div>
+    );
+  };
+
   return (
-    <div className="ghibli-profile-bg min-vh-100 py-4 px-3 px-md-5">
-      <Button
-        variant="link"
-        className="text-decoration-none ghibli-back-btn mb-4"
-        onClick={() => navigate('/')}
-      >
-        <BsArrowLeft className="me-1" /> Kembali
-      </Button>
+    <div className="py-4 px-3 bg-light min-vh-100">
+      <Container fluid>
+        <Button
+          variant="link"
+          className="text-decoration-none mb-4 text-muted"
+          onClick={() => navigate('/')}
+        >
+          <BsArrowLeft className="me-1" /> Kembali
+        </Button>
 
-      <h2 className="ghibli-font text-center mb-4">Dashboard Admin</h2>
+        <h2 className="text-center mb-4 fw-bold text-dark">Dashboard Admin</h2>
 
-      <Container className="mb-4">
-        <Row>
-          <Col md={6}><strong>Nama:</strong> {user?.nama || '-'}</Col>
-          <Col md={6}><strong>No. Telepon:</strong> {user?.nomor_telepon || '-'}</Col>
+        <Row className="gx-4 gy-4">
+          <Col xs={12} lg={9}>
+            {renderContent()}
+          </Col>
+
+          <Col xs={12} lg={3}>
+            <SidebarMenu activeView={activeView} setActiveView={setActiveView} />
+            <AdminInfoCard user={user} />
+          </Col>
         </Row>
       </Container>
 
-      <Container>
-        <div className="d-flex justify-content-between align-items-center mb-3">
-          <h5 className="fw-semibold">Daftar Rajutan</h5>
-          <Button onClick={() => navigate('/admin-dashboard/create')} className="ghibli-edit-btn rounded-pill px-3">
-            <BsPlus className="me-1" />Tambah
-          </Button>
-
-
-        </div>
-
-        {rajutanList.map((item) => (
-          <Row key={item.id} className="border-bottom py-3 align-items-center">
-            <Col xs={12} md={2}>
-              {item.url_gambar && (
-                <img src={item.url_gambar} alt={item.nama} className="img-fluid rounded shadow-sm" style={{ maxHeight: '80px' }} />
-              )}
-            </Col>
-            <Col xs={12} md={3}><strong>{item.nama}</strong></Col>
-            <Col xs={12} md={4}>{item.deskripsi}</Col>
-            <Col xs={12} md={3} className="text-md-end mt-2 mt-md-0">
-              <Button
-                variant="outline-primary"
-                size="sm"
-                className="me-2"
-                onClick={() => handleShowModal(item)}
-              >
-                <BsPencil />
-              </Button>
-              <Button
-                variant="outline-danger"
-                size="sm"
-                onClick={() => handleDelete(item.id)}
-              >
-                <BsTrash />
-              </Button>
-            </Col>
-          </Row>
-        ))}
-      </Container>
-
-      <Modal show={showModal} onHide={() => setShowModal(false)} centered>
-        <Modal.Header closeButton>
-          <Modal.Title>{editMode ? 'Edit Rajutan' : 'Tambah Rajutan'}</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Form>
-            <Form.Group className="mb-3">
-              <Form.Label>Nama Rajutan</Form.Label>
-              <Form.Control
-                type="text"
-                value={currentRajutan.nama}
-                onChange={(e) => setCurrentRajutan({ ...currentRajutan, nama: e.target.value })}
-              />
-            </Form.Group>
-            <Form.Group className="mb-3">
-              <Form.Label>Deskripsi</Form.Label>
-              <Form.Control
-                as="textarea"
-                rows={3}
-                value={currentRajutan.deskripsi}
-                onChange={(e) => setCurrentRajutan({ ...currentRajutan, deskripsi: e.target.value })}
-              />
-            </Form.Group>
-          </Form>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={() => setShowModal(false)}>Batal</Button>
-          <Button variant="primary" onClick={handleSave}>Simpan</Button>
-        </Modal.Footer>
-      </Modal>
+      <RajutanModal
+        show={showModal}
+        onHide={() => setShowModal(false)}
+        onSave={handleSave}
+        editMode={editMode}
+        currentRajutan={currentRajutan}
+        setCurrentRajutan={setCurrentRajutan}
+      />
     </div>
   );
 };

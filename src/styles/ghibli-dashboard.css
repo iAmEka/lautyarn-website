@@ -1,0 +1,44 @@
+.ghibli-dashboard-bg {
+  background: linear-gradient(#fdfaf5, #efe6dc);
+  min-height: 100vh;
+  font-family: 'Cinzel Decorative', cursive;
+}
+
+.ghibli-font {
+  font-family: 'Cinzel Decorative', cursive;
+  color: #4b352b;
+}
+
+.ghibli-title {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #5b4033;
+}
+
+.ghibli-subtitle {
+  font-size: 1rem;
+  color: #6d4e3b;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.ghibli-card-sm {
+  background-color: #fffefb;
+  border: 1px solid #f0e4d8;
+  border-radius: 12px;
+}
+
+.ghibli-btn-sm {
+  background-color: #d6ba96;
+  border: none;
+  font-weight: bold;
+  color: #3c2f2b;
+  padding: 4px 12px;
+  font-size: 0.9rem;
+  border-radius: 20px;
+}
+
+.ghibli-btn-sm:hover {
+  background-color: #c8a97f;
+  color: #2a1f1b;
+}

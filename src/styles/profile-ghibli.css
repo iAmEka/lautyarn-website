@@ -46,3 +46,8 @@
   color: var(--ghibli-soft);
   font-family: 'Quicksand', sans-serif;
 }
+/* Tambah di profile-ghibli.css */
+.ghibli-card-sm .row > [class^="col"] {
+  display: flex;
+  align-items: center;
+}
