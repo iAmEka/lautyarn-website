@@ -9,11 +9,12 @@ import {
 } from 'react-bootstrap';
 import { BsArrowLeft, BsPlus, BsList } from 'react-icons/bs';
 import { useNavigate } from 'react-router-dom';
+import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 
 import RajutanTable from '../components/admindashboard/RajutanTable';
 import SidebarMenu from '../components/admindashboard/SidebarMenu';
 import AdminInfoCard from '../components/admindashboard/AdminInfoCard';
-import RajutanModal from '../components/admindashboard/RajutanModal';
+
 import GhibliLoader from '../components/GhibliLoader';
 import TypeTable from '../components/admindashboard/TypeTable';
 
@@ -30,6 +31,7 @@ const AdminDashboard = ({ user }) => {
   const [selectedId, setSelectedId] = useState(null);
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
   const [showDropdown, setShowDropdown] = useState(false);
+  const [loadingItemId, setLoadingItemId] = useState(null); // ✅ Loading per item
 
   useEffect(() => {
     fetchRajutan();
@@ -101,6 +103,7 @@ const AdminDashboard = ({ user }) => {
   const handleToggleStatus = async (item) => {
     const newStatus = item.status === 'ready' ? 'pre_order' : 'ready';
     const updatedData = { ...item, status: newStatus };
+    setLoadingItemId(item.id); // ✅ Set loading hanya untuk item ini
 
     try {
       const response = await fetch(`${API_BASE_URL}/rajutan/${item.id}`, {
@@ -108,10 +111,19 @@ const AdminDashboard = ({ user }) => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(updatedData),
       });
+
       if (!response.ok) throw new Error('Gagal mengubah status');
-      fetchRajutan();
+
+      // ✅ Update data lokal tanpa reload semua
+      setRajutanList((prevList) =>
+        prevList.map((rajutan) =>
+          rajutan.id === item.id ? { ...rajutan, status: newStatus } : rajutan
+        )
+      );
     } catch (err) {
       console.error('Error toggle status:', err);
+    } finally {
+      setLoadingItemId(null); // ✅ Reset loading
     }
   };
 
@@ -123,13 +135,20 @@ const AdminDashboard = ({ user }) => {
         <>
           <div className="d-flex justify-content-between align-items-center mb-3">
             <h5 className="fw-bold text-secondary mb-0">🧵 Daftar Rajutan</h5>
-            <Button
-              onClick={() => navigate('/rajutan/create')}
-              variant="outline-warning"
-              size="sm"
-            >
-              <BsPlus /> Tambah
-            </Button>
+            <OverlayTrigger
+                placement="left"
+                overlay={<Tooltip id="tooltip-tambah">Tambah Rajutan</Tooltip>}
+              >
+                <Button
+                  onClick={() => navigate('/rajutan/create')}
+                  variant="outline-warning"
+                  size="sm"
+                  className="d-flex align-items-center justify-content-center p-1"
+                  style={{ width: '30px', height: '30px', borderRadius: '8px' }}
+                >
+                  <BsPlus size={16} />
+                </Button>
+              </OverlayTrigger>
           </div>
 
           <RajutanTable
@@ -137,6 +156,7 @@ const AdminDashboard = ({ user }) => {
             onEdit={handleShowModal}
             onDelete={handleDelete}
             onToggleStatus={handleToggleStatus}
+            loadingItemId={loadingItemId} // ✅ Kirim ke RajutanTable
           />
         </>
       );
@@ -198,16 +218,10 @@ const AdminDashboard = ({ user }) => {
         </Row>
       </Container>
 
-      <RajutanModal
-        show={showModal}
-        onHide={() => setShowModal(false)}
-        onSave={handleSave}
-        editMode={editMode}
-        currentRajutan={currentRajutan}
-        setCurrentRajutan={setCurrentRajutan}
-      />
+      
     </div>
   );
 };
 
 export default AdminDashboard;
+  
