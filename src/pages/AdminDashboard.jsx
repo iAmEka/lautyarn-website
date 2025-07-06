@@ -1,6 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { Container, Row, Col, Button } from 'react-bootstrap';
-import { BsArrowLeft, BsPlus } from 'react-icons/bs';
+import {
+  Container,
+  Row,
+  Col,
+  Button,
+  Card,
+  Dropdown,
+} from 'react-bootstrap';
+import { BsArrowLeft, BsPlus, BsList } from 'react-icons/bs';
 import { useNavigate } from 'react-router-dom';
 
 import RajutanTable from '../components/admindashboard/RajutanTable';
@@ -10,13 +17,10 @@ import RajutanModal from '../components/admindashboard/RajutanModal';
 import GhibliLoader from '../components/GhibliLoader';
 import TypeTable from '../components/admindashboard/TypeTable';
 
-
 const API_BASE_URL = 'https://lautyarn-api-nixpacksstartcmd.up.railway.app';
 
 const AdminDashboard = ({ user }) => {
   const navigate = useNavigate();
-
-  // State
   const [activeView, setActiveView] = useState('rajutan');
   const [rajutanList, setRajutanList] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -24,10 +28,14 @@ const AdminDashboard = ({ user }) => {
   const [editMode, setEditMode] = useState(false);
   const [currentRajutan, setCurrentRajutan] = useState({ nama: '', deskripsi: '' });
   const [selectedId, setSelectedId] = useState(null);
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+  const [showDropdown, setShowDropdown] = useState(false);
 
-  // Fetch data saat pertama kali
   useEffect(() => {
     fetchRajutan();
+    const handleResize = () => setIsMobile(window.innerWidth < 768);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
   }, []);
 
   const fetchRajutan = async () => {
@@ -145,7 +153,6 @@ const AdminDashboard = ({ user }) => {
     );
   };
 
-
   return (
     <div className="py-4 px-3 bg-light min-vh-100">
       <Container fluid>
@@ -157,17 +164,37 @@ const AdminDashboard = ({ user }) => {
           <BsArrowLeft className="me-1" /> Kembali
         </Button>
 
-        <h2 className="text-center mb-4 fw-bold text-dark">Dashboard Admin</h2>
+        <div className="d-flex justify-content-between align-items-center mb-2">
+          <h2 className="fw-bold text-dark">Dashboard Admin</h2>
+
+          {isMobile && (
+            <Dropdown show={showDropdown} onToggle={() => setShowDropdown(!showDropdown)}>
+              <Dropdown.Toggle as={Button} variant="outline-secondary" size="sm">
+                <BsList size={20} />
+              </Dropdown.Toggle>
+              <Dropdown.Menu align="end">
+                <SidebarMenu activeView={activeView} setActiveView={setActiveView} />
+              </Dropdown.Menu>
+            </Dropdown>
+          )}
+        </div>
 
         <Row className="gx-4 gy-4">
           <Col xs={12} lg={9}>
             {renderContent()}
           </Col>
 
-          <Col xs={12} lg={3}>
-            <SidebarMenu activeView={activeView} setActiveView={setActiveView} />
-            <AdminInfoCard user={user} />
-          </Col>
+          {!isMobile && (
+            <Col xs={12} lg={3}>
+              <Card className="mb-3">
+                <Card.Body>
+                  <h6 className="text-muted mb-3">📂 Daftar Lainnya</h6>
+                  <SidebarMenu activeView={activeView} setActiveView={setActiveView} />
+                </Card.Body>
+              </Card>
+              <AdminInfoCard user={user} />
+            </Col>
+          )}
         </Row>
       </Container>
 

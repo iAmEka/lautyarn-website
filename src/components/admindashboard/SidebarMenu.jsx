@@ -1,6 +1,6 @@
-// components/admindashboard/SidebarMenu.jsx
+// src/components/admindashboard/SidebarMenu.jsx
 import React from 'react';
-import { Card, ListGroup } from 'react-bootstrap';
+import { ListGroup } from 'react-bootstrap';
 
 const SidebarMenu = ({ activeView, setActiveView }) => {
   const menus = [
@@ -12,23 +12,18 @@ const SidebarMenu = ({ activeView, setActiveView }) => {
   ];
 
   return (
-    <Card className="mb-3">
-      <Card.Body>
-        <h6 className="text-muted mb-3">📂 Daftar Lainnya</h6>
-        <ListGroup variant="flush">
-          {menus.map((menu) => (
-            <ListGroup.Item
-              key={menu.key}
-              action
-              active={activeView === menu.key}
-              onClick={() => setActiveView(menu.key)}
-            >
-              {menu.label}
-            </ListGroup.Item>
-          ))}
-        </ListGroup>
-      </Card.Body>
-    </Card>
+    <ListGroup variant="flush">
+      {menus.map((menu) => (
+        <ListGroup.Item
+          key={menu.key}
+          action
+          active={activeView === menu.key}
+          onClick={() => setActiveView(menu.key)}
+        >
+          {menu.label}
+        </ListGroup.Item>
+      ))}
+    </ListGroup>
   );
 };
 

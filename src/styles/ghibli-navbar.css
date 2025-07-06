@@ -1,23 +1,23 @@
 @import url('https://fonts.googleapis.com/css2?family=Berkshire+Swash&display=swap');
 
+/* === NAVBAR UTAMA === */
 .ghibli-navbar {
-  position: fixed; /* agar mengambang */
+  position: fixed;
   top: 0;
   left: 0;
   width: 100%;
-
-  z-index: 1050; 
+  z-index: 1050;
   background-color: rgba(255, 255, 255, 0.7);
   backdrop-filter: blur(12px);
   font-family: 'Berkshire Swash', cursive;
   border-bottom: 1px solid #eee;
 }
 
-
+/* === BRAND === */
 .ghibli-brand {
   font-size: 1.8rem;
   color: #2E4F4F !important;
-  margin-left: 1rem; /* Space from left edge */
+  margin-left: 1rem;
 }
 
 .ghibli-brand:hover,
@@ -25,12 +25,12 @@
   color: #5C7AEA !important;
 }
 
-/* Ghibli-style nav link */
+/* === NAV LINK === */
 .nav-link-ghibli {
   color: #2E4F4F !important;
   position: relative;
   font-size: 1.05rem;
-  padding-left: 1.5rem; /* Increased spacing */
+  padding-left: 1.5rem;
   padding-right: 1.5rem;
 }
 
@@ -46,6 +46,7 @@
   height: 2px;
   background: #5C7AEA;
   margin-top: 2px;
+  transition: width 0.3s ease;
 }
 
 .nav-link-ghibli:hover::after,
@@ -53,19 +54,21 @@
   width: 100%;
 }
 
-/* Center nav items with more spacing */
+/* === NAV CENTER === */
 .ghibli-nav-center {
   display: flex;
-  gap: 2.5rem; /* Increased gap between nav items */
+  gap: 2.5rem;
 }
 
-/* Dropdown toggle tanpa panah */
+/* === HAMBURGER TOGGLE === */
 .ghibli-menu-toggle {
   padding: 6px 10px;
   border-radius: 4px;
   cursor: pointer;
   background: transparent;
-  margin-right: 1rem; /* Space from right edge */
+  border: none !important;
+  box-shadow: none !important;
+  margin-right: 1rem;
 }
 
 .ghibli-menu-icon {
@@ -77,7 +80,7 @@
   color: #5C7AEA;
 }
 
-/* Dropdown Menu */
+/* === DROPDOWN === */
 .ghibli-dropdown-menu .dropdown-item {
   font-family: 'Berkshire Swash', cursive;
   font-size: 1rem;
@@ -94,12 +97,48 @@
 .dropdown-toggle::after {
   display: none !important;
 }
-/* Smooth Scroll Behavior */
+
+/* === RESPONSIVE: MOBILE === */
+@media (max-width: 768px) {
+  .ghibli-nav-center {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+    margin-top: 1rem;
+  }
+
+  .ghibli-menu-toggle {
+    padding: 4px 8px !important;
+    background-color: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+  }
+
+  .ghibli-menu-icon {
+    font-size: 22px !important;
+    color: #2E4F4F;
+  }
+
+  .ghibli-dropdown-menu {
+    width: 100%;
+    padding: 0.5rem 0;
+    background-color: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(10px);
+    border-radius: 0.75rem;
+  }
+
+  .ghibli-dropdown-menu .dropdown-item {
+    width: 100%;
+    text-align: left;
+    padding: 0.6rem 1.2rem;
+  }
+}
+
+/* === SCROLL === */
 html {
   scroll-behavior: smooth;
 }
 
-/* Ghibli-style Scrollbar */
 ::-webkit-scrollbar {
   width: 10px;
 }
@@ -109,7 +148,7 @@ html {
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color: rgba(92, 122, 234, 0.35); /* Ghibli Sky Blue Soft */
+  background-color: rgba(92, 122, 234, 0.35);
   border-radius: 20px;
   border: 2px solid transparent;
   background-clip: content-box;
@@ -124,7 +163,7 @@ html {
   background: transparent;
 }
 
-/* For Firefox */
+/* Firefox */
 * {
   scrollbar-width: thin;
   scrollbar-color: rgba(92, 122, 234, 0.4) transparent;
