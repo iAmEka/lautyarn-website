@@ -20,7 +20,6 @@ const RajutanTable = ({ items, onDelete, onToggleStatus, loadingItemId }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedType, setSelectedType] = useState('');
 
-  // Ambil daftar tipe yang unik dari data
   const uniqueTypes = Array.from(
     new Set(items.map((item) => item.type_rajutan?.nama).filter(Boolean))
   );
@@ -68,15 +67,31 @@ const RajutanTable = ({ items, onDelete, onToggleStatus, loadingItemId }) => {
         </Col>
       </Row>
 
-      {/* Konten Scrollable */}
+      {/* Header Desktop */}
+      {!isMobile && (
+        <div className="mb-2 d-none d-md-block">
+          <Row className="fw-bold text-muted small">
+            <Col md={2}>Gambar</Col>
+            <Col md={3}>Nama & Tipe</Col>
+            <Col md={3}>Harga / Like / Fav</Col>
+            <Col md={2}>Status</Col>
+            <Col md={2}>Aksi</Col>
+          </Row>
+        </div>
+      )}
+
       <div style={{ maxHeight: '70vh', overflowY: 'auto', paddingRight: '8px' }}>
-        <div className="d-flex flex-column gap-3">
+        <div className="d-flex flex-column">
           {sortedItems.map((item) => {
             const isLoading = loadingItemId === item.id;
             const typeName = item.type_rajutan?.nama || '-';
 
             return (
-              <div key={item.id} className="position-relative">
+              <div
+                key={item.id}
+                className="position-relative pb-2 mb-2"
+                style={{ borderBottom: '1px solid rgba(0,0,0,0.08)' }}
+              >
                 {isLoading && (
                   <div
                     className="position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center"
@@ -90,44 +105,56 @@ const RajutanTable = ({ items, onDelete, onToggleStatus, loadingItemId }) => {
                   </div>
                 )}
 
-                <Card className="shadow-sm border-0 rounded-3">
-                  <Row className="g-0 align-items-center p-2">
-                    <Col xs={4} md={2} className="text-center">
+                <Card
+                  className="border-0 rounded-3 px-2 py-2"
+                  style={{
+                    backgroundColor: 'transparent',
+                    boxShadow: 'none',
+                  }}
+                >
+                  {isMobile ? (
+                    // Mobile layout
+                    <div
+                      className="d-flex align-items-center justify-content-between gap-2"
+                      style={{ fontSize: '0.45rem' }}
+                    >
                       <Image
                         src={item.url_gambar}
                         rounded
-                        fluid
-                        style={{ height: 80, width: 80, objectFit: 'cover' }}
+                        style={{
+                          height: 40,
+                          width: 40,
+                          objectFit: 'cover',
+                          flexShrink: 0,
+                        }}
                       />
-                    </Col>
-
-                    <Col xs={5} md={7}>
-                      <div className="fw-semibold" style={{ fontSize: isMobile ? '0.6rem' : '0.9rem' }}>
-                        {item.nama}
+                      <div className="d-flex flex-column" style={{ minWidth: 50 }}>
+                        <div
+                          className="fw-semibold"
+                          style={{ cursor: 'pointer', color: '#495057' }}
+                          onClick={() => navigate(`/admin-dashboard/rajutan/detail/${item.id}`)}
+                          onMouseEnter={(e) => (e.currentTarget.style.color = '#198754')}
+                          onMouseLeave={(e) => (e.currentTarget.style.color = '#495057')}
+                        >
+                          {item.nama}
+                        </div>
+                        <div className="text-muted">{typeName}</div>
                       </div>
-                      <div className="text-muted" style={{ fontSize: isMobile ? '0.5rem' : '0.7rem' }}>
-                        Tipe: {typeName}
+                      <div className="d-flex flex-column align-items-start" style={{ minWidth: 60 }}>
+                        <div>Rp {item.price.toLocaleString()}</div>
+                        <div className="d-flex gap-1">
+                          <span>❤️ {item.count_like}</span>
+                          <span>⭐ {item.count_favorite}</span>
+                        </div>
                       </div>
-                      <div
-                        className="d-flex flex-wrap gap-2 mt-1"
-                        style={{ fontSize: isMobile ? '0.5rem' : '0.7rem', color: '#555' }}
-                      >
-                        <span>❤️ {item.count_like}</span>
-                        <span>⭐ {item.count_favorite}</span>
-                        <span>💰 Rp {item.price.toLocaleString()}</span>
-                      </div>
-                    </Col>
-
-                    <Col xs={3} md={3} className="text-end">
-                      <div className="d-flex flex-column align-items-end gap-1">
+                      <div className="d-flex flex-column align-items-center" style={{ minWidth: 45 }}>
                         <Badge
                           bg={item.status === 'ready' ? 'success' : 'warning'}
-                          className="text-capitalize"
-                          style={{ fontSize: isMobile ? '0.5rem' : '0.65rem' }}
+                          className="text-capitalize mb-1"
+                          style={{ fontSize: '0.45rem' }}
                         >
                           {item.status}
                         </Badge>
-
                         <Form.Check
                           type="switch"
                           id={`switch-${item.id}`}
@@ -135,33 +162,95 @@ const RajutanTable = ({ items, onDelete, onToggleStatus, loadingItemId }) => {
                           checked={item.status === 'ready'}
                           onChange={() => onToggleStatus(item)}
                           disabled={isLoading}
-                          className="small"
-                          style={{ transform: 'scale(0.85)' }}
+                          style={{ transform: 'scale(0.75)' }}
                         />
-
-                        <div className="d-flex justify-content-end gap-1">
-                          <Button
-                            variant="outline-primary"
-                            size="sm"
-                            className="px-1 py-0"
-                            style={{ fontSize: isMobile ? '0.55rem' : '0.75rem' }}
-                            onClick={() => navigate(`/admin-dashboard/rajutan/edit/${item.id}`)}
-                          >
-                            <BsPencil />
-                          </Button>
-                          <Button
-                            variant="outline-danger"
-                            size="sm"
-                            className="px-1 py-0"
-                            style={{ fontSize: isMobile ? '0.55rem' : '0.75rem' }}
-                            onClick={() => onDelete(item.id)}
-                          >
-                            <BsTrash />
-                          </Button>
-                        </div>
                       </div>
-                    </Col>
-                  </Row>
+                      <div className="d-flex flex-column gap-1">
+                        <Button
+                          variant="outline-primary"
+                          size="sm"
+                          className="px-1 py-0"
+                          style={{ fontSize: '0.45rem' }}
+                          onClick={() => navigate(`/admin-dashboard/rajutan/edit/${item.id}`)}
+                        >
+                          <BsPencil />
+                        </Button>
+                        <Button
+                          variant="outline-danger"
+                          size="sm"
+                          className="px-1 py-0"
+                          style={{ fontSize: '0.45rem' }}
+                          onClick={() => onDelete(item.id)}
+                        >
+                          <BsTrash />
+                        </Button>
+                      </div>
+                    </div>
+                  ) : (
+                    // Desktop layout
+                    <Row className="align-items-center small">
+                      <Col md={2}>
+                        <Image
+                          src={item.url_gambar}
+                          rounded
+                          fluid
+                          style={{ height: 80, objectFit: 'cover' }}
+                        />
+                      </Col>
+                      <Col md={3}>
+                        <div
+                          className="fw-semibold"
+                          style={{ cursor: 'pointer', color: '#495057' }}
+                          onClick={() => navigate(`/admin-dashboard/rajutan/detail/${item.id}`)}
+                          onMouseEnter={(e) => (e.currentTarget.style.color = '#198754')}
+                          onMouseLeave={(e) => (e.currentTarget.style.color = '#495057')}
+                        >
+                          {item.nama}
+                        </div>
+                        <div className="text-muted">{typeName}</div>
+                      </Col>
+                      <Col md={3}>
+                        <div>Rp {item.price.toLocaleString()}</div>
+                        <div className="d-flex gap-2 mt-1 text-muted">
+                          <span>❤️ {item.count_like}</span>
+                          <span>⭐ {item.count_favorite}</span>
+                        </div>
+                      </Col>
+                      <Col md={2}>
+                        <Badge
+                          bg={item.status === 'ready' ? 'success' : 'warning'}
+                          className="text-capitalize"
+                        >
+                          {item.status}
+                        </Badge>
+                        <Form.Check
+                          type="switch"
+                          id={`switch-${item.id}`}
+                          label=""
+                          checked={item.status === 'ready'}
+                          onChange={() => onToggleStatus(item)}
+                          disabled={isLoading}
+                          className="mt-1"
+                        />
+                      </Col>
+                      <Col md={2} className="d-flex gap-1 justify-content-end">
+                        <Button
+                          variant="outline-primary"
+                          size="sm"
+                          onClick={() => navigate(`/admin-dashboard/rajutan/edit/${item.id}`)}
+                        >
+                          <BsPencil />
+                        </Button>
+                        <Button
+                          variant="outline-danger"
+                          size="sm"
+                          onClick={() => onDelete(item.id)}
+                        >
+                          <BsTrash />
+                        </Button>
+                      </Col>
+                    </Row>
+                  )}
                 </Card>
               </div>
             );

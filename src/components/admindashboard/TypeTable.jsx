@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Table, Button, Form, InputGroup } from 'react-bootstrap';
+import { Button, Form, InputGroup, Spinner, Alert } from 'react-bootstrap';
 import { BsTrash, BsPlus } from 'react-icons/bs';
 import axios from 'axios';
 
@@ -9,6 +9,7 @@ const TypeTable = () => {
   const [types, setTypes] = useState([]);
   const [newTypeName, setNewTypeName] = useState('');
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
 
   const fetchTypes = async () => {
     try {
@@ -17,6 +18,7 @@ const TypeTable = () => {
       setTypes(response.data);
     } catch (err) {
       console.error('❌ Error fetchTypeRajutan:', err);
+      setError('Gagal memuat data tipe rajutan.');
     } finally {
       setLoading(false);
     }
@@ -28,15 +30,12 @@ const TypeTable = () => {
 
   const handleAddType = async () => {
     const trimmedName = newTypeName.trim();
-    if (!trimmedName) {
-      alert('⚠️ Nama tipe tidak boleh kosong');
-      return;
-    }
+    if (!trimmedName) return alert('⚠️ Nama tipe tidak boleh kosong');
 
     try {
       await axios.post(`${API_BASE_URL}/type-rajutan/`, { nama: trimmedName });
       setNewTypeName('');
-      fetchTypes(); // refresh
+      fetchTypes();
     } catch (err) {
       console.error('❌ Gagal menambahkan tipe:', err);
       alert('Gagal menambahkan tipe rajutan.');
@@ -48,7 +47,7 @@ const TypeTable = () => {
 
     try {
       await axios.delete(`${API_BASE_URL}/type-rajutan/${id}`);
-      fetchTypes(); // refresh
+      fetchTypes();
     } catch (err) {
       console.error('❌ Gagal menghapus tipe:', err);
       alert('Gagal menghapus tipe rajutan.');
@@ -56,12 +55,13 @@ const TypeTable = () => {
   };
 
   return (
-    <div className="mt-3">
-      <div className="d-flex justify-content-between align-items-center mb-3">
-        <h5 className="fw-bold text-secondary mb-0">🛠️ Daftar Tipe Rajutan</h5>
-      </div>
+    <div className="mt-4">
+      <h6 className="fw-bold text-dark mb-3" style={{ fontFamily: 'Georgia, serif' }}>
+        🧵 Daftar Tipe Rajutan
+      </h6>
 
-      <InputGroup className="mb-4">
+      {/* Input Tambah */}
+      <InputGroup className="mb-3" size="sm">
         <Form.Control
           placeholder="Masukkan nama tipe baru"
           value={newTypeName}
@@ -72,36 +72,46 @@ const TypeTable = () => {
         </Button>
       </InputGroup>
 
-      {loading ? (
-        <p className="text-muted">Memuat data tipe rajutan...</p>
-      ) : (
-        <div className="table-responsive">
-          <Table hover borderless responsive className="align-middle">
-            <thead className="table-light small text-muted">
-              <tr>
-                <th style={{ width: '5%' }}>#</th>
-                <th>Nama Tipe</th>
-                <th className="text-end">Aksi</th>
-              </tr>
-            </thead>
-            <tbody>
-              {types.map((type, index) => (
-                <tr key={type.id}>
-                  <td>{index + 1}</td>
-                  <td>{type.nama}</td>
-                  <td className="text-end">
-                    <Button
-                      variant="outline-danger"
-                      size="sm"
-                      onClick={() => handleDeleteType(type.id)}
-                    >
-                      <BsTrash />
-                    </Button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </Table>
+      {/* Loading/Error State */}
+      {loading && (
+        <div className="text-center my-3">
+          <Spinner animation="border" variant="secondary" size="sm" />
+          <span className="ms-2 small">Memuat tipe rajutan...</span>
+        </div>
+      )}
+
+      {error && <Alert variant="danger" className="small">{error}</Alert>}
+
+      {/* List Tipe */}
+      {!loading && types.length === 0 && (
+        <p className="text-muted small">Belum ada tipe rajutan.</p>
+      )}
+
+      {!loading && types.length > 0 && (
+        <div className="d-flex flex-column gap-2">
+          {types.map((type, index) => (
+            <div
+              key={type.id}
+              className="px-3 py-2 border-bottom d-flex justify-content-between align-items-center"
+              style={{
+                fontSize: '0.85rem',
+                lineHeight: '1.3',
+                borderColor: 'rgba(0,0,0,0.06)',
+              }}
+            >
+              <div className="d-flex align-items-center gap-2 text-muted">
+                <span className="fw-semibold text-dark">{index + 1}.</span>
+                <span>{type.nama}</span>
+              </div>
+              <Button
+                variant="outline-danger"
+                size="sm"
+                onClick={() => handleDeleteType(type.id)}
+              >
+                <BsTrash />
+              </Button>
+            </div>
+          ))}
         </div>
       )}
     </div>

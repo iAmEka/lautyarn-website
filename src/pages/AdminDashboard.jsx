@@ -14,9 +14,12 @@ import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import RajutanTable from '../components/admindashboard/RajutanTable';
 import SidebarMenu from '../components/admindashboard/SidebarMenu';
 import AdminInfoCard from '../components/admindashboard/AdminInfoCard';
+import CustomerTable from '../components/admindashboard/CustomerTable';
+import AdminTable from '../components/admindashboard/AdminTable';
 
 import GhibliLoader from '../components/GhibliLoader';
 import TypeTable from '../components/admindashboard/TypeTable';
+
 
 const API_BASE_URL = 'https://lautyarn-api-nixpacksstartcmd.up.railway.app';
 
@@ -164,6 +167,12 @@ const AdminDashboard = ({ user }) => {
 
     if (activeView === 'type_rajutan') {
       return <TypeTable />;
+    }
+    if (activeView === 'customer') {
+      return <CustomerTable />;
+    }
+    if (activeView === 'admin') {
+      return <AdminTable />;
     }
 
     return (

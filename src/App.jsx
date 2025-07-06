@@ -17,6 +17,8 @@ import UpdateProfile from './pages/UpdateProfile';
 import AdminDashboard from './pages/AdminDashboard';
 import CreateRajutan from './pages/rajutan/CreateRajutan';
 import UpdateRajutan from './pages/rajutan/UpdateRajutan';
+import AdminDetailRajutan from './pages/rajutan/AdminDetailRajutan';
+
 
 const API_BASE_URL = 'https://lautyarn-api-nixpacksstartcmd.up.railway.app';
 
@@ -69,9 +71,10 @@ function App() {
     localStorage.removeItem('userRole');
   };
 
-  const hideNavbarRoutes = ['/profile', '/update-profile'];
-  const shouldShowNavbar = !hideNavbarRoutes.includes(location.pathname);
-
+  const hideNavbarRoutes = ['/profile', '/update-profile', '/admin-dashboard/rajutan/detail'];
+  const shouldShowNavbar = !hideNavbarRoutes.some((route) =>
+    location.pathname.startsWith(route)
+  );
   if (loading) {
     return (
       <div className="d-flex justify-content-center align-items-center" style={{ minHeight: '100vh' }}>
@@ -93,6 +96,8 @@ function App() {
         <Route path="/about" element={<About />} />
 
         <Route path="/login" element={<LoginPage onLogin={handleLogin} />} />
+        <Route path="/admin-dashboard/rajutan/detail/:id" element={<AdminDetailRajutan />} />
+
         <Route path="/register" element={<RegisterPage />} />
         <Route
             path="/rajutan/create"
