@@ -156,7 +156,6 @@ const AdminDashboard = ({ user }) => {
 
           <RajutanTable
             items={rajutanList}
-            onEdit={handleShowModal}
             onDelete={handleDelete}
             onToggleStatus={handleToggleStatus}
             loadingItemId={loadingItemId} // ✅ Kirim ke RajutanTable

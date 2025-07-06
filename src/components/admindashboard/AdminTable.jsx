@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Spinner, Alert } from 'react-bootstrap';
+import { Spinner, Alert, Form, InputGroup } from 'react-bootstrap';
 
 const API_URL = 'https://lautyarn-api-nixpacksstartcmd.up.railway.app/users/';
 
@@ -7,6 +7,7 @@ const AdminTable = () => {
   const [admins, setAdmins] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
     const fetchAdmins = async () => {
@@ -27,6 +28,15 @@ const AdminTable = () => {
     fetchAdmins();
   }, []);
 
+  const filteredAdmins = admins.filter((user) => {
+    const lower = searchTerm.toLowerCase();
+    return (
+      user.nama?.toLowerCase().includes(lower) ||
+      user.nomor_telepon?.toLowerCase().includes(lower) ||
+      user.alamat?.toLowerCase().includes(lower)
+    );
+  });
+
   if (loading) {
     return (
       <div className="text-center my-3">
@@ -40,55 +50,66 @@ const AdminTable = () => {
     return <Alert variant="danger">{error}</Alert>;
   }
 
-  if (admins.length === 0) {
-    return <p className="text-muted small">Belum ada data admin.</p>;
-  }
-
   return (
     <div>
       <h6 className="fw-bold mb-3 text-dark" style={{ fontFamily: 'Georgia, serif' }}>
         👮 Daftar Admin
       </h6>
 
-      <div className="d-flex flex-column gap-2">
-        {admins.map((user) => (
-          <div
-            key={user.id}
-            className="px-3 py-2 border-bottom"
-            style={{
-              fontSize: '0.7rem',
-              overflowX: 'auto',
-              whiteSpace: 'nowrap',
-            }}
-          >
+      {/* Input Pencarian */}
+      <InputGroup size="sm" className="mb-3">
+        <InputGroup.Text>Cari</InputGroup.Text>
+        <Form.Control
+          type="text"
+          placeholder="Cari nama, telepon, atau alamat..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
+      </InputGroup>
+
+      {filteredAdmins.length === 0 ? (
+        <p className="text-muted small">Tidak ada admin yang cocok.</p>
+      ) : (
+        <div className="d-flex flex-column gap-2">
+          {filteredAdmins.map((user) => (
             <div
-              className="d-flex flex-nowrap align-items-start gap-3"
-              style={{ minWidth: '550px' }}
+              key={user.id}
+              className="px-3 py-2 border-bottom"
+              style={{
+                fontSize: '0.7rem',
+                overflowX: 'auto',
+                whiteSpace: 'nowrap',
+              }}
             >
-              <div style={{ minWidth: '120px' }}>
-                <strong>Nama:</strong>
-                <div>{user.nama}</div>
-              </div>
-              <div style={{ minWidth: '180px' }}>
-                <strong>Email:</strong>
-                <div>{user.email}</div>
-              </div>
-              <div style={{ minWidth: '130px' }}>
-                <strong>Username:</strong>
-                <div>{user.username}</div>
-              </div>
-              <div style={{ minWidth: '120px' }}>
-                <strong>Telepon:</strong>
-                <div>{user.nomor_telepon}</div>
-              </div>
-              <div style={{ minWidth: '200px' }}>
-                <strong>Alamat:</strong>
-                <div>{user.alamat}</div>
+              <div
+                className="d-flex flex-nowrap align-items-start gap-3"
+                style={{ minWidth: '550px' }}
+              >
+                <div style={{ minWidth: '120px' }}>
+                  <strong>Nama:</strong>
+                  <div>{user.nama}</div>
+                </div>
+                <div style={{ minWidth: '180px' }}>
+                  <strong>Email:</strong>
+                  <div>{user.email}</div>
+                </div>
+                <div style={{ minWidth: '130px' }}>
+                  <strong>Username:</strong>
+                  <div>{user.username}</div>
+                </div>
+                <div style={{ minWidth: '120px' }}>
+                  <strong>Telepon:</strong>
+                  <div>{user.nomor_telepon}</div>
+                </div>
+                <div style={{ minWidth: '200px' }}>
+                  <strong>Alamat:</strong>
+                  <div>{user.alamat}</div>
+                </div>
               </div>
             </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 };
