@@ -11,6 +11,8 @@
   backdrop-filter: blur(12px);
   font-family: 'Berkshire Swash', cursive;
   border-bottom: 1px solid #eee;
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
 }
 
 /* === BRAND === */
@@ -18,6 +20,7 @@
   font-size: 1.8rem;
   color: #2E4F4F !important;
   margin-left: 1rem;
+  text-decoration: none;
 }
 
 .ghibli-brand:hover,
@@ -32,6 +35,7 @@
   font-size: 1.05rem;
   padding-left: 1.5rem;
   padding-right: 1.5rem;
+  text-decoration: none;
 }
 
 .nav-link-ghibli:hover,
@@ -81,10 +85,19 @@
 }
 
 /* === DROPDOWN === */
+.ghibli-dropdown-menu {
+  padding: 0.5rem 0;
+  background-color: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border-radius: 0.75rem;
+  min-width: 160px;
+}
+
 .ghibli-dropdown-menu .dropdown-item {
   font-family: 'Berkshire Swash', cursive;
   font-size: 1rem;
   color: #2E4F4F;
+  padding: 0.5rem 1rem;
   transition: all 0.3s ease;
 }
 
@@ -96,42 +109,6 @@
 /* Hilangkan panah dropdown Bootstrap */
 .dropdown-toggle::after {
   display: none !important;
-}
-
-/* === RESPONSIVE: MOBILE === */
-@media (max-width: 768px) {
-  .ghibli-nav-center {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.5rem;
-    margin-top: 1rem;
-  }
-
-  .ghibli-menu-toggle {
-    padding: 4px 8px !important;
-    background-color: transparent !important;
-    border: none !important;
-    box-shadow: none !important;
-  }
-
-  .ghibli-menu-icon {
-    font-size: 22px !important;
-    color: #2E4F4F;
-  }
-
-  .ghibli-dropdown-menu {
-    width: 100%;
-    padding: 0.5rem 0;
-    background-color: rgba(255, 255, 255, 0.85);
-    backdrop-filter: blur(10px);
-    border-radius: 0.75rem;
-  }
-
-  .ghibli-dropdown-menu .dropdown-item {
-    width: 100%;
-    text-align: left;
-    padding: 0.6rem 1.2rem;
-  }
 }
 
 /* === SCROLL === */
@@ -167,4 +144,51 @@ html {
 * {
   scrollbar-width: thin;
   scrollbar-color: rgba(92, 122, 234, 0.4) transparent;
+}
+
+/* === RESPONSIVE: MOBILE === */
+@media (max-width: 768px) {
+  .ghibli-navbar {
+    padding-top: 0.4rem;
+    padding-bottom: 0.4rem;
+  }
+
+  .ghibli-brand {
+    font-size: 1.3rem;
+  }
+
+  .ghibli-nav-center {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.3rem;
+    margin-top: 1rem;
+  }
+
+  .nav-link-ghibli {
+    font-size: 0.9rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  .ghibli-menu-toggle {
+    padding: 2px 6px !important;
+  }
+
+  .ghibli-menu-icon {
+    font-size: 20px !important;
+  }
+
+  .ghibli-dropdown-menu {
+    width: 150px;
+    padding: 0.2rem 0;
+    font-size: 0.85rem;
+    background-color: rgba(255, 255, 255, 0.95);
+    border-radius: 8px;
+    min-width: unset;
+  }
+
+  .ghibli-dropdown-menu .dropdown-item {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.85rem;
+  }
 }
