@@ -1,11 +1,24 @@
 import React from 'react';
-import { Container, Row, Col, Button } from 'react-bootstrap';
+import { Container, Row, Col, Button, ButtonGroup } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
-import { BsArrowLeft } from 'react-icons/bs'; // Ganti dengan react-icons
+import { BsArrowLeft } from 'react-icons/bs';
+import { signOut } from 'firebase/auth';
+import { auth } from '../config/firebase';
 import '../styles/profile-ghibli.css';
 
-const Profile = ({ user, userRole }) => {
+const Profile = ({ user, userRole, onLogout }) => {
   const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    try {
+      await signOut(auth);
+      if (onLogout) onLogout();
+      navigate('/');
+      alert('Berhasil logout!');
+    } catch (error) {
+      alert('Gagal logout: ' + error.message);
+    }
+  };
 
   if (!user) {
     return (
@@ -62,14 +75,24 @@ const Profile = ({ user, userRole }) => {
               <Col sm={8}><span className="fw-bold text-info">{userRole}</span></Col>
             </Row>
 
+            {/* Tombol Aksi */}
             <div className="text-end mt-4">
-              <Button
-                variant="outline-primary"
-                className="rounded-pill ghibli-edit-btn px-4"
-                onClick={() => navigate('/update-profile')}
-              >
-                Edit Profil
-              </Button>
+              <ButtonGroup>
+                <Button
+                  variant="outline-primary"
+                  className="rounded-pill px-4"
+                  onClick={() => navigate('/update-profile')}
+                >
+                  Edit Profil
+                </Button>
+                <Button
+                  variant="outline-danger"
+                  className="rounded-pill px-4 ms-2"
+                  onClick={handleLogout}
+                >
+                  Logout
+                </Button>
+              </ButtonGroup>
             </div>
           </Col>
         </Row>

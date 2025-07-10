@@ -1,14 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import {
-  Container,
-  Row,
-  Col,
-  Badge,
-  Spinner,
-  Button,
-} from 'react-bootstrap';
-import { BsArrowLeft, BsPencil } from 'react-icons/bs';
+import { Spinner } from 'react-bootstrap';
+import { BsHeart, BsBookmark, BsShare, BsPencilSquare } from 'react-icons/bs';
 
 const API_BASE_URL = 'https://lautyarn-api-nixpacksstartcmd.up.railway.app';
 
@@ -36,8 +29,8 @@ const AdminDetailRajutan = () => {
 
   if (loading) {
     return (
-      <div className="d-flex justify-content-center align-items-center vh-100">
-        <Spinner animation="border" variant="secondary" />
+      <div className="d-flex justify-content-center align-items-center vh-100 bg-light">
+        <Spinner animation="border" />
       </div>
     );
   }
@@ -45,85 +38,97 @@ const AdminDetailRajutan = () => {
   if (!rajutan) return <p className="text-center mt-5">Data tidak ditemukan.</p>;
 
   const {
-    nama,
-    count_like,
-    count_favorite,
-    price,
+    nama = 'Rajutan Tanpa Nama',
+    deskripsi = '',
+    price = 0,
     url_gambar,
-    status,
-    deskripsi,
+    status = 'ready',
+    count_like = 0,
+    count_favorite = 0,
+    colorcode = [],
     created_at,
-    type_rajutan,
-    colorcode,
+    type_rajutan = { nama: '-' },
+    bahan = [],
+    ukuran = '-',
+    lama_pengerjaan = '-',
   } = rajutan;
 
   return (
-    <Container className="py-4">
-      <Button variant="link" className="text-decoration-none mb-4 text-muted" onClick={() => navigate(-1)}>
-        <BsArrowLeft className="me-1" /> Kembali
-      </Button>
-
-      <Row className="gx-5">
-        {/* KIRI: Gambar & Info Ringkas */}
-        <Col xs={12} md={5} className="mb-4 mb-md-0">
-          <div
-            className="mb-3"
-            style={{
-              border: '1px solid #ccc',
-              borderRadius: '1rem',
-              overflow: 'hidden',
-            }}
-          >
-            <img
-              src={url_gambar}
-              alt={nama}
-              className="img-fluid"
-              style={{
-                width: '100%',
-                maxHeight: '500px',
-                objectFit: 'cover',
-              }}
-            />
+    <div className="ghibli-background py-5">
+      <div className="container">
+        <div className="row g-4">
+          {/* LEFT */}
+          <div className="col-md-5 text-center">
+            <div className="ghibli-image-preview">
+              <img
+                src={url_gambar}
+                alt={nama}
+                className="img-fluid rounded border border-primary ghibli-image-preview-img"
+              />
+            </div>
+            <div className="d-flex justify-content-between align-items-center mt-3 px-2">
+              <div className="d-flex gap-3">
+                <span><BsHeart className="me-1" /> {count_like}</span>
+                <span><BsBookmark className="me-1" /> {count_favorite}</span>
+              </div>
+              <div className="d-flex gap-3">
+                <BsShare size={18} style={{ cursor: 'pointer' }} />
+                <BsPencilSquare
+                  size={18}
+                  style={{ cursor: 'pointer' }}
+                  onClick={() => navigate(`/admin-dashboard/rajutan/edit/${id}`)}
+                />
+              </div>
+            </div>
+            <h4 className="mt-3 fw-bold text-center ghibli-title">{nama}</h4>
+            <small className="text-muted">Jenis: {type_rajutan?.nama}</small>
+            <p className="mt-2 text-danger fw-semibold">
+              Release at: {new Date(created_at).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })},{' '}
+              {new Date(created_at).toLocaleDateString('id-ID')}
+            </p>
           </div>
 
-          <div>
-            <h4 className="fw-bold">{nama}</h4>
-            <Badge
-              bg={status === 'ready' ? 'success' : 'warning'}
-              className="text-capitalize mb-2"
-            >
-              {status}
-            </Badge>
-            <div className="text-muted small mt-1">
-              Ditambahkan pada: {new Date(created_at).toLocaleDateString('id-ID')} <br />
-              Tipe: {type_rajutan?.nama || '-'}
+          {/* RIGHT */}
+          <div className="col-md-7">
+            <h3 className="fw-bold ghibli-title">🌸 Detail Rajutan 🌸</h3>
+            <div className="ghibli-content-box">
+              <p><strong>Nama:</strong> {nama}</p>
+              <p><strong>Jenis:</strong> {type_rajutan?.nama}</p>
+
+              <div className="mb-3">
+                <strong>Warna:</strong>
+                <div className="d-flex flex-wrap gap-2 mt-2">
+                  {colorcode.length > 0 ? colorcode.map((code, idx) => (
+                    <div
+                      key={idx}
+                      title={code}
+                      style={{
+                        width: '30px',
+                        height: '30px',
+                        borderRadius: '50%',
+                        backgroundColor: code,
+                        border: '1px solid #555'
+                      }}
+                    />
+                  )) : <p className="text-muted">Tidak ada warna</p>}
+                </div>
+              </div>
+
+              <p><strong>Status:</strong> {status}</p>
+              <p><strong>Harga:</strong> Rp{price.toLocaleString('id-ID')}</p>
+              <p><strong>Bahan:</strong> {Array.isArray(bahan) ? bahan.join(', ') : bahan}</p>
+              <p><strong>Ukuran:</strong> {ukuran}</p>
+              <p><strong>Lama Pengerjaan:</strong> {lama_pengerjaan}</p>
+
+              <p className="mt-3"><strong>Deskripsi:</strong></p>
+              <div className="ghibli-description-box">
+                {deskripsi || 'Belum ada deskripsi...'}
+              </div>
             </div>
           </div>
-        </Col>
-
-        {/* KANAN: Detail */}
-        <Col xs={12} md={7}>
-          <div className="d-flex justify-content-between align-items-center mb-3">
-            <h5 className="text-secondary fw-bold mb-0">🧶 Detail Rajutan</h5>
-            <Button
-              variant="outline-primary"
-              size="sm"
-              onClick={() => navigate(`/admin-dashboard/rajutan/edit/${id}`)}
-            >
-              <BsPencil className="me-1" /> Edit
-            </Button>
-          </div>
-
-          <div style={{ backgroundColor: '#fffef6', borderRadius: '1rem', padding: '1.5rem' }}>
-            <p><strong>Nama:</strong> {nama}</p>
-            <p><strong>Deskripsi:</strong><br />{deskripsi || '-'}</p>
-            <p><strong>Harga:</strong> Rp {price.toLocaleString()}</p>
-            <p><strong>Like:</strong> ❤️ {count_like} &nbsp; | &nbsp; <strong>Favorite:</strong> ⭐ {count_favorite}</p>
-            <p><strong>Color Code:</strong> {colorcode?.join(', ') || '-'}</p>
-          </div>
-        </Col>
-      </Row>
-    </Container>
+        </div>
+      </div>
+    </div>
   );
 };
 
