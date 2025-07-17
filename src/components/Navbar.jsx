@@ -100,7 +100,7 @@ const Navbar = ({ user, userRole, onLogout }) => {
         <Container fluid className="px-3">
           <RBNavbar.Brand as={Link} to="/" className="d-flex align-items-center gap-3 fw-bold px-2">
             <Image src="/logo.png" alt="logo" roundedCircle width={30} height={30} />
-            <span className="marykate-font">Lautyarn</span>
+            <span className="marykate-font" style={{ letterSpacing: '6px' }}>Lautyarn</span>
           </RBNavbar.Brand>
 
           <RBNavbar.Toggle as={CustomToggle} onClick={handleShow} aria-controls="offcanvasNavbar-expand-lg" />

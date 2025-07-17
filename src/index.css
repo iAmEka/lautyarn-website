@@ -40,3 +40,9 @@ body {
 .nav-link-ghibli.active::after {
   width: 100%;
 } */
+@font-face {
+  font-family: 'MaryKate';
+  src: url('/fonts/MaryKate.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}

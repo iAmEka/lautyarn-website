@@ -1,8 +1,7 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
-import { Container, Button, Row, Col, Card } from 'react-bootstrap';
+import React, { useEffect } from 'react';
+import { useLocation, Link } from 'react-router-dom';
+import { Container, Button, Row, Col, Card, Image } from 'react-bootstrap';
+import '../styles/home-mobile.css'; // Import styling khusus mobile
 
 const placeholderImg = "https://via.placeholder.com/200";
 
@@ -11,80 +10,111 @@ const Home = () => {
 
   useEffect(() => {
     if (location.hash) {
-      // Delay scroll supaya elemen sempat dirender dulu
-      const scrollToHash = () => {
+      setTimeout(() => {
         const el = document.querySelector(location.hash);
-        if (el) {
-          el.scrollIntoView({ behavior: 'smooth' });
-        }
-      };
-
-      // Coba scroll langsung (kalau sudah ready), atau tunggu 200ms
-      setTimeout(scrollToHash, 200);
+        if (el) el.scrollIntoView({ behavior: 'smooth' });
+      }, 200);
     }
   }, [location]);
-  return (
-    <div style={{ fontFamily: "'Quicksand', sans-serif", backgroundColor: '#fdfcf6' }}>
-      {/* Hero Section */}
-      <div id="hero" className="d-flex align-items-center text-white" style={{
 
-        backgroundImage: "url('https://images.unsplash.com/photo-1602810312537-3cc3fa2a4c49?auto=format&fit=crop&w=1470&q=80')",
-        backgroundSize: 'cover', backgroundPosition: 'center', height: '100vh', position: 'relative'
-      }}>
-        <div className="container" style={{ zIndex: 2, maxWidth: '600px' }}>
-          <h1 className="fw-bold mb-3" style={{
-            fontFamily: "'Cinzel Decorative', cursive", fontSize: '2rem', textShadow: '2px 2px 6px rgba(0,0,0,0.6)'
-          }}>
-            Rajutan itu cinta, benangnya adalah takdir.
-          </h1>
-          <p className="mb-4" style={{ fontSize: '0.9rem', textShadow: '1px 1px 3px rgba(0,0,0,0.5)' }}>
-            Temukan kehangatan dalam setiap jahitan. Hidup terlalu singkat untuk tidak memakai rajutan lucu 🧶✨
-          </p>
-          <Button as={Link} to="/store" variant="light" size="sm" className="fw-semibold">🌸 Mulai Belanja</Button>
+  const sections = [
+    { title: '🧵 Our New Release', color: 'success', data: [1, 2, 3, 4, 5] },
+    { title: '🔥 Most Popular', color: 'danger', data: [1, 2, 3] }
+  ];
+
+  return (
+    <>
+      {/* Hero Section */}
+      <div className="d-flex w-100 vh-100 m-0 p-0 hero-section" style={{ backgroundColor: '#fff4e8' }}>
+        {/* Left Side */}
+        <div className="d-flex ps-5 pt-5 mt-5 hero-section-left" style={{ width: '50%' }}>
+          <div className="px-4" style={{ maxWidth: '500px' }}>
+            <p className="fw-bold brand-tagline" style={{ fontSize: '1.65rem', marginBottom: '-50px' }}>Handcrafts ➰</p>
+            <p className="fw-bold brand-title" style={{ fontFamily: 'MaryKate', fontSize: '8.4rem', letterSpacing: '10px', marginBottom: '-120px' }}>
+              Lautyarn
+            </p>
+            <div className="d-flex align-items-center gap-2 title-group">
+              <p className="fw-bold m-0 brand-title" style={{ fontFamily: 'MaryKate', fontSize: '8.4rem', letterSpacing: '10px' }}>
+                Corner
+              </p>
+              <Image src="/octopus.png" alt="logo" className="logo-octopus" style={{ height: '8.4rem', width: 'auto' }} />
+            </div>
+            <Button
+              as={Link}
+              to="/store"
+              className="btn-shop ms-5"
+              style={{backgroundColor: '#ffcde8',
+                borderColor: '#ffcde8',
+                borderRadius: '100px',
+                color: '#000',
+                padding: '0.675rem 2rem',
+                fontWeight: 600,
+                fontSize: '1.28rem',
+                marginTop: '-60px'
+              }}
+            >
+              Mulai Belanja
+            </Button>
+          </div>
         </div>
-        <div className="position-absolute top-0 start-0 w-100 h-100" style={{ backgroundColor: 'rgba(0,0,0,0.35)' }} />
+
+        {/* Right Side */}
+        <div className="d-flex flex-column align-items-end text-end pe-5 pt-5 mt-5" style={{ width: '50%' }}>
+          <p className="fw-bold m-0 brand-subtitle" style={{ fontFamily: 'Quicksand', fontSize: '3.68rem', color: '#ac7b7b' }}>
+            Crafted with care,
+          </p>
+          <div className="d-flex align-items-center gap-2" style={{ marginTop: '-20px', marginBottom: '20px' }}>
+            <Image src="/yarn.png" alt="logo" style={{ height: '3.68rem', width: 'auto' }} />
+            <p className="fw-bold m-0 brand-subtitle" style={{ fontFamily: 'Quicksand', fontSize: '3.68rem', color: '#ac7b7b' }}>
+              just for you
+            </p>
+          </div>
+          <p className="fw-bold m-0 brand-description" style={{ fontFamily: 'Quicksand', fontSize: '1.57rem', textAlign: 'justify' }}>
+            All pieces are handmade with love, one loop at a time. Feel the warmth, the care, and the joy woven into each creation. Made by me, just for you.
+          </p>
+        </div>
       </div>
 
       {/* Produk Section */}
       <Container fluid className="py-5 px-4">
-        <Row className="gy-4">
-          {[
-            { title: '🧵 Our New Release', color: 'success', data: [1, 2, 3, 4, 5] },
-            { title: '🔥 Most Popular', color: 'danger', data: [1, 2, 3] }
-          ].map((section, idx) => (
-            <Col key={idx} md={6} className="d-flex flex-column align-items-center">
-              <h5 className={`fw-bold mb-3 text-${section.color} text-center`} style={{ fontFamily: "'Cinzel Decorative', cursive" }}>
-                {section.title}
+        <Row className="gy-5">
+          {sections.map((sec, idx) => (
+            <Col key={idx} md={6}>
+              <h5 className={`fw-bold mb-3 text-${sec.color} text-center`} style={{ fontFamily: "'Cinzel Decorative'" }}>
+                {sec.title}
               </h5>
-              <div className="d-flex flex-wrap justify-content-center gap-3">
-                {section.data.map(i => (
-                  <Card key={i} className="product-card text-center border-0 bg-transparent">
-                    <Card.Img variant="top" src={placeholderImg} className="product-img" />
-                    <Card.Body className="px-1 py-2">
-                      <div className={`text-truncate fw-semibold text-${section.color}`}>
-                        {section.title.includes("New") ? "New Item" : "Best Seller"} #{i}
-                      </div>
-                      <Button variant={`outline-${section.color}`} size="sm" as={Link} to="/store" className="mt-1 product-btn">Detail</Button>
-                    </Card.Body>
-                  </Card>
+              <Row className="g-3 justify-content-center">
+                {sec.data.map(i => (
+                  <Col key={i} xs={4} sm={3} md={3} lg={2}>
+                    <Card className="text-center border-0 bg-transparent">
+                      <Card.Img src={placeholderImg} className="img-fluid rounded" />
+                      <Card.Body className="p-2">
+                        <div className={`fw-semibold text-${sec.color} small`}>
+                          {(sec.title.includes('New') ? 'New Item' : 'Best Seller')} #{i}
+                        </div>
+                        <Button variant={`outline-${sec.color}`} size="sm" as={Link} to="/store" className="mt-1 w-100">
+                          Detail
+                        </Button>
+                      </Card.Body>
+                    </Card>
+                  </Col>
                 ))}
-              </div>
+              </Row>
             </Col>
           ))}
         </Row>
       </Container>
 
-      {/* About Us Section */}
-      <Container id="about" fluid className="d-flex align-items-center justify-content-center" style={{ minHeight: '100vh', backgroundColor: '#f5f0e6' }}>
-
+      {/* About Section */}
+      <Container id="about" fluid className="min-vh-100 d-flex align-items-center justify-content-center bg-light">
         <Row className="w-100 justify-content-center">
           <Col md={10} lg={8}>
-            <Card className="border-0 shadow-lg p-4 about-card">
-              <Card.Body className="text-center">
-                <h3 className="fw-bold mb-4" style={{ fontFamily: "'Cinzel Decorative', cursive", color: '#6b4c3b' }}>
+            <Card className="border-0 shadow p-4 bg-white text-center">
+              <Card.Body>
+                <h3 className="fw-bold mb-4" style={{ fontFamily: "'Cinzel Decorative'", color: '#6b4c3b' }}>
                   🌿 Tentang Kami
                 </h3>
-                <p className="about-text">
+                <p className="text-muted">
                   Kami adalah tim kecil yang percaya bahwa setiap rajutan membawa cerita dan kehangatan. <br />
                   Dengan bahan terbaik dan penuh cinta, kami menciptakan produk handmade yang tidak hanya indah, tapi juga bermakna. <br />
                   Terinspirasi dari keindahan alam dan dunia Studio Ghibli, setiap karya kami punya sentuhan magis tersendiri ✨🧶
@@ -94,54 +124,7 @@ const Home = () => {
           </Col>
         </Row>
       </Container>
-
-      {/* Mobile Styles */}
-      <style>{`
-        @media (max-width: 576px) {
-          .product-card {
-            width: 80px !important;
-            font-size: 0.6rem !important;
-          }
-          .product-img {
-            height: 70px !important;
-            border-radius: 8px;
-            object-fit: cover;
-          }
-          .product-btn {
-            font-size: 0.6rem !important;
-          }
-          .about-card {
-            border-radius: 15px !important;
-            padding: 1.5rem !important;
-            background-color: rgba(255,255,255,0.85);
-          }
-          .about-text {
-            font-size: 0.85rem !important;
-            line-height: 1.6 !important;
-            color: #4b3e34;
-          }
-        }
-
-        @media (min-width: 577px) {
-          .product-card {
-            width: 110px;
-            font-size: 0.75rem;
-          }
-          .product-img {
-            height: 100px;
-            border-radius: 10px;
-            object-fit: cover;
-          }
-          .product-btn {
-            font-size: 0.7rem;
-          }
-          .about-text {
-            font-size: 1rem;
-            line-height: 1.8;
-          }
-        }
-      `}</style>
-    </div>
+    </>
   );
 };
 

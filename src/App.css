@@ -41,3 +41,9 @@
 .read-the-docs {
   color: #888;
 } */
+@font-face {
+  font-family: 'MaryKate';
+  src: url('/fonts/MaryKate.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
