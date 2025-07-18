@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { Container, Form, Button, Row, Col } from 'react-bootstrap';
 import axios from 'axios';
 import ImageUploaderWithCrop from '../../components/ImageUploaderWithCrop';
+import { BsHeart, BsBookmark } from 'react-icons/bs';
 import '../../styles/CreateRajutan.css';
 
 const API_BASE_URL = 'https://lautyarn-api-nixpacksstartcmd.up.railway.app';
@@ -102,13 +103,34 @@ const UpdateRajutan = () => {
         <Form onSubmit={handleSubmit} className="px-4 py-4 fade-in" style={{ backgroundColor: 'rgba(255, 255, 255, 0.0)' }}>
           <Row>
             <Col md={5} className="text-center">
+              {/* Gambar Preview Kotak */}
               <Form.Group className="mb-3 fade-in">
                 <Form.Label className="ghibli-label">Ganti Gambar</Form.Label>
                 <ImageUploaderWithCrop setImageUrl={setUrlGambar} />
                 <div className="mt-3">
                   {urlGambar ? (
-                    <div className="ghibli-image-preview">
-                      <img src={urlGambar} alt="Preview" className="ghibli-image-preview-img" />
+                    <div
+                      style={{
+                        width: '100%',
+                        maxWidth: '360px',
+                        aspectRatio: '1 / 1',
+                        border: '2px solid #0d6efd',
+                        borderRadius: '8px',
+                        overflow: 'hidden',
+                        backgroundColor: '#f8f9fa',
+                        margin: '0 auto'
+                      }}
+                    >
+                      <img
+                        src={urlGambar}
+                        alt="Preview"
+                        style={{
+                          width: '100%',
+                          height: '100%',
+                          objectFit: 'cover',
+                          objectPosition: 'center'
+                        }}
+                      />
                     </div>
                   ) : (
                     <div className="ghibli-image-preview ghibli-image-placeholder">
@@ -117,6 +139,16 @@ const UpdateRajutan = () => {
                   )}
                 </div>
               </Form.Group>
+
+              {/* Like & Favorite (non-editable) */}
+              <div className="d-flex justify-content-center gap-4 mb-4">
+                <div className="d-flex align-items-center text-danger fw-semibold">
+                  <BsHeart className="me-1" /> {countLike}
+                </div>
+                <div className="d-flex align-items-center text-primary fw-semibold">
+                  <BsBookmark className="me-1" /> {countFavorite}
+                </div>
+              </div>
 
               <Form.Group className="mb-3 fade-in">
                 <Form.Label className="ghibli-label">Harga (Rp)</Form.Label>
@@ -157,16 +189,6 @@ const UpdateRajutan = () => {
                   onChange={(e) => setNama(e.target.value)}
                   required
                 />
-              </Form.Group>
-
-              <Form.Group className="mb-3 fade-in">
-                <Form.Label className="ghibli-label">Jumlah Like</Form.Label>
-                <Form.Control type="number" value={countLike} readOnly />
-              </Form.Group>
-
-              <Form.Group className="mb-3 fade-in">
-                <Form.Label className="ghibli-label">Jumlah Favorite</Form.Label>
-                <Form.Control type="number" value={countFavorite} readOnly />
               </Form.Group>
 
               <Form.Group className="mb-4 fade-in">

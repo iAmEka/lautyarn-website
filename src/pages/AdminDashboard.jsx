@@ -182,14 +182,14 @@ const AdminDashboard = ({ user }) => {
   };
 
   return (
-    <div className="py-4 px-3 bg-light min-vh-100">
+    <div className="py-4 px-3 bg-light min-vh-100 pt-5 ">
       <Container fluid>
         <Button
           variant="link"
           className="text-decoration-none mb-4 text-muted"
           onClick={() => navigate('/')}
         >
-          <BsArrowLeft className="me-1" /> Kembali
+          <BsArrowLeft className="me-1" /> 
         </Button>
 
         <div className="d-flex justify-content-between align-items-center mb-2">

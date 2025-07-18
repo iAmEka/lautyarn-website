@@ -10,6 +10,7 @@ const AdminDetailRajutan = () => {
   const navigate = useNavigate();
   const [rajutan, setRajutan] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [isPressed, setIsPressed] = useState(false); // animasi
 
   useEffect(() => {
     const fetchDetail = async () => {
@@ -26,6 +27,13 @@ const AdminDetailRajutan = () => {
 
     fetchDetail();
   }, [id]);
+
+  const handleBack = () => {
+    setIsPressed(true);
+    setTimeout(() => {
+      navigate(-1); // kembali
+    }, 200); // waktu animasi
+  };
 
   if (loading) {
     return (
@@ -56,18 +64,52 @@ const AdminDetailRajutan = () => {
   return (
     <div className="ghibli-background py-5">
       <div className="container">
+        {/* Tombol kembali dengan animasi */}
+        <p
+          onClick={handleBack}
+          style={{
+            fontSize: '1.5rem',
+            width: 'fit-content',
+            cursor: 'pointer',
+            userSelect: 'none',
+            transition: 'transform 0.2s ease',
+            transform: isPressed ? 'scale(0.85)' : 'scale(1)',
+            color: '#555',
+            marginBottom: '1rem',
+          }}
+        >
+          ⬅️
+        </p>
+
         <div className="row g-4">
           {/* LEFT */}
           <div className="col-md-5 text-center">
-            <div className="ghibli-image-preview">
+            <div
+              className="ghibli-image-preview mx-auto"
+              style={{
+                width: '100%',
+                maxWidth: '400px',
+                aspectRatio: '1 / 1',
+                overflow: 'hidden',
+                border: '2px solid #0d6efd',
+                borderRadius: '8px',
+                backgroundColor: '#f8f9fa',
+              }}
+            >
               <img
                 src={url_gambar}
                 alt={nama}
-                className="img-fluid rounded border border-primary ghibli-image-preview-img"
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  objectFit: 'cover',
+                  objectPosition: 'center',
+                }}
               />
             </div>
+
             <div className="d-flex justify-content-between align-items-center mt-3 px-2">
-              <div className="d-flex gap-3">
+              <div className="d-flex gap-3 ">
                 <span><BsHeart className="me-1" /> {count_like}</span>
                 <span><BsBookmark className="me-1" /> {count_favorite}</span>
               </div>

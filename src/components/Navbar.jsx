@@ -111,7 +111,7 @@ const Navbar = ({ user, userRole, onLogout }) => {
 
               {user && userRole === 'admin' && (
                 <>
-                  <Nav.Link as={Link} to="/mydashboard">Dashboard</Nav.Link>
+                  <Nav.Link as={Link} to="/admin-dashboard">Dashboard</Nav.Link>
                   <Nav.Link as={Link} to="/history">History</Nav.Link>
                   <Nav.Link as={Link} to="/profile">Profile</Nav.Link>
                 </>
@@ -154,7 +154,7 @@ const Navbar = ({ user, userRole, onLogout }) => {
 
                 {user && userRole === 'admin' && (
                   <>
-                    <Nav.Link onClick={() => handleNavClick("/mydashboard")}>Dashboard</Nav.Link>
+                    <Nav.Link onClick={() => handleNavClick("/admin-dashboard")}>Dashboard</Nav.Link>
                     <Nav.Link onClick={() => handleNavClick("/history")}>History</Nav.Link>
                     <Nav.Link onClick={() => handleNavClick("/profile")}>Profile</Nav.Link>
                   </>
