@@ -1,7 +1,6 @@
-// src/pages/Store.jsx
 import React, { useEffect, useState } from 'react';
-import { Card, Row, Col, Container, Button } from 'react-bootstrap';
-import '../styles/Store.css';
+import { Container, Button, Pagination } from 'react-bootstrap';
+import { BsHeart, BsBookmark, BsShare } from 'react-icons/bs';
 
 const API_BASE_URL = 'https://lautyarn-api-nixpacksstartcmd.up.railway.app';
 
@@ -9,15 +8,36 @@ const Store = ({ user }) => {
   const [rajutan, setRajutan] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(16);
+  const [cardStyle, setCardStyle] = useState({});
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
-    const fetchRajutan = async () => {
+    const handleResize = () => {
+      const width = window.innerWidth;
+      if (width < 768) {
+        setItemsPerPage(8);
+        setCardStyle({ width: 'calc(50% - 0.5rem)' });
+        setIsMobile(true);
+      } else {
+        setItemsPerPage(16);
+        setCardStyle({ width: 'calc(25% - 0.75rem)' });
+        setIsMobile(false);
+      }
+    };
+
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  useEffect(() => {
+    const fetchData = async () => {
       try {
-        const response = await fetch(`${API_BASE_URL}/rajutan/`);
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const data = await response.json();
+        const res = await fetch(`${API_BASE_URL}/rajutan/`);
+        if (!res.ok) throw new Error('Gagal fetch produk');
+        const data = await res.json();
         setRajutan(data);
       } catch (err) {
         setError(err.message);
@@ -25,67 +45,155 @@ const Store = ({ user }) => {
         setLoading(false);
       }
     };
-    fetchRajutan();
+    fetchData();
   }, []);
 
-  const isGuest = !user;
+  const totalPages = Math.ceil(rajutan.length / itemsPerPage);
+  const currentItems = rajutan.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
 
   if (loading) return <p className="text-center my-5">Memuat produk...</p>;
-  if (error) return <p className="text-center my-5 text-danger">Error memuat produk: {error}</p>;
+  if (error) return <p className="text-center text-danger">{error}</p>;
 
   return (
-    <div className="ghibli-background-store">
-      <Container className="py-5">
-        <h1 className="mb-4 text-center ghibli-title">🧶 Toko Rajutan Ghibli 🧶</h1>
-        <p className="lead text-center ghibli-subtitle mb-5">Temukan kehangatan dalam setiap rajutan.</p>
-        <Row xs={1} md={2} lg={4} className="g-4">
-          {rajutan.length > 0 ? (
-            rajutan.map((item) => (
-              <Col key={item.id}>
-                <Card className="h-100 ghibli-card">
-                  {item.url_gambar && (
-                    <Card.Img
-                      variant="top"
-                      src={item.url_gambar}
-                      className="card-img-top-custom"
-                    />
-                  )}
-                  <Card.Body className="text-center d-flex flex-column">
-                    <Card.Title className="fw-bold fs-5 mb-2 ghibli-card-title">{item.nama}</Card.Title>
-                    <Card.Text className="text-primary fs-4 fw-bold">
-                      Rp{item.price.toLocaleString('id-ID')}
-                    </Card.Text>
-                    <Card.Text className="text-muted small mb-2">
-                      <span>❤️ {item.count_like}</span> &nbsp;
-                      <span>⭐ {item.count_favorite}</span>
-                    </Card.Text>
-                    <Card.Text className="text-secondary small">
-                      Warna: {item.colorcode.join(', ')}
-                    </Card.Text>
-                    <Button
-                      disabled={isGuest}
-                      onClick={() =>
-                        isGuest
-                          ? alert('Silakan login untuk melakukan pembelian.')
-                          : alert(`Beli produk: ${item.nama}`)
-                      }
-                      className="mt-auto ghibli-buy-button"
-                      variant="success"
-                    >
-                      Beli Sekarang
-                    </Button>
-                  </Card.Body>
-                </Card>
-              </Col>
-            ))
-          ) : (
-            <Col>
-              <p className="text-center text-muted">Belum ada produk rajutan.</p>
-            </Col>
-          )}
-        </Row>
+    <section style={{ backgroundColor: '#f9f9f9' }}>
+      <Container className="py-4 mt-4">
+        <div
+          style={{
+            display: 'flex',
+            flexWrap: 'wrap',
+            gap: isMobile ? '0.5rem' : '1rem',
+            justifyContent: 'flex-start',
+          }}
+        >
+          {currentItems.map((item) => (
+            <div
+              key={item.id}
+              style={{
+                ...cardStyle,
+                backgroundColor: '#fff',
+                borderRadius: '12px',
+                boxShadow: '0 2px 6px rgba(0,0,0,0.05)',
+                display: 'flex',
+                flexDirection: isMobile ? 'column' : 'row',
+                overflow: 'hidden',
+                flex: '0 0 auto',
+              }}
+            >
+              {/* Gambar dan Icon */}
+              <div
+                style={{
+                  width: isMobile ? '100%' : '40%',
+                  padding: isMobile ? '0.4rem' : '0.5rem',
+                }}
+              >
+                <div
+                  style={{
+                    width: '100%',
+                    aspectRatio: '1 / 1',
+                    overflow: 'hidden',
+                    borderRadius: '8px',
+                  }}
+                >
+                  <img
+                    src={item.url_gambar}
+                    alt={item.nama}
+                    style={{
+                      width: '100%',
+                      height: '100%',
+                      objectFit: 'cover',
+                      borderRadius: '8px',
+                    }}
+                  />
+                </div>
+                <div
+                  style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    fontSize: '0.7rem',
+                    marginTop: '0.4rem',
+                    color: '#777',
+                  }}
+                >
+                  <div style={{ display: 'flex', gap: '0.6rem', color: 'tomato' }}>
+                    <span><BsHeart /> {item.count_like}</span>
+                    <span><BsBookmark /> {item.count_favorite}</span>
+                  </div>
+                  <div><BsShare /></div>
+                </div>
+              </div>
+
+              {/* Info dan Tombol */}
+              <div
+                style={{
+                  width: isMobile ? '100%' : '60%',
+                  padding: isMobile ? '0.4rem 0.6rem 0.5rem' : '0.6rem 0.5rem',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'space-between',
+                }}
+              >
+                <div>
+                  <p style={{ fontWeight: '600', fontSize: '0.85rem', marginBottom: '0.3rem' }}>
+                    {item.nama}
+                  </p>
+                  <p style={{ fontSize: '0.7rem', color: '#777', marginBottom: '0.2rem' }}>
+                    {item.tipe || 'Rajutan'}
+                  </p>
+                  <p style={{ fontSize: '0.8rem', color: 'green', fontWeight: 'bold' }}>
+                    Rp{item.price.toLocaleString('id-ID')}
+                  </p>
+                </div>
+                <Button
+                  variant="outline-primary"
+                  size="sm"
+                  className="w-100 mt-1"
+                  onClick={() =>
+                    !user
+                      ? alert('Silakan login untuk membeli.')
+                      : alert(`Pesan produk: ${item.nama}`)
+                  }
+                  disabled={!user}
+                  style={{
+                    fontSize: '0.65rem',
+                    padding: '0.2rem 0.4rem',
+                    borderRadius: '5px',
+                    lineHeight: '1.2',
+                  }}
+                >
+                  Pesan
+                </Button>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Pagination */}
+        {totalPages > 1 && (
+          <div className="d-flex justify-content-center mt-4">
+            <Pagination>
+              {[...Array(totalPages)].map((_, i) => (
+                <Pagination.Item
+                  key={i + 1}
+                  active={i + 1 === currentPage}
+                  onClick={() => handlePageChange(i + 1)}
+                  style={{ fontSize: '0.85rem' }}
+                >
+                  {i + 1}
+                </Pagination.Item>
+              ))}
+            </Pagination>
+          </div>
+        )}
       </Container>
-    </div>
+    </section>
   );
 };
 
