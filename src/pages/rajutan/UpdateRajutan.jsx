@@ -27,6 +27,7 @@ const UpdateRajutan = () => {
   const [status, setStatus] = useState('ready');
   const [selectedTypeId, setSelectedTypeId] = useState('');
   const [typeOptions, setTypeOptions] = useState([]);
+  const [pengrajin, setPengrajin] = useState('admin'); // default sementara
 
   useEffect(() => {
     const fetchData = async () => {
@@ -45,6 +46,7 @@ const UpdateRajutan = () => {
         setBahan(data.bahan?.join(', ') || '');
         setUkuran(data.ukuran || '');
         setLamaPengerjaan(data.lama_pengerjaan || '');
+        setPengrajin(data.pengrajin || 'admin');
       } catch (err) {
         console.error('Gagal mengambil data rajutan:', err);
         alert('Data gagal dimuat.');
@@ -76,14 +78,15 @@ const UpdateRajutan = () => {
       count_like: parseInt(countLike),
       count_favorite: parseInt(countFavorite),
       colorcode: colorList,
+      price: parseInt(price),
+      url_gambar: urlGambar.trim(),
+      status,
+      deskripsi: deskripsi.trim(),
+      id_type: selectedTypeId,
       bahan: bahan.split(',').map((b) => b.trim()).filter(Boolean),
       ukuran: ukuran.trim(),
       lama_pengerjaan: lamaPengerjaan.trim(),
-      price: parseInt(price),
-      url_gambar: urlGambar.trim(),
-      deskripsi: deskripsi.trim(),
-      status,
-      id_type: selectedTypeId,
+      pengrajin: pengrajin.trim(), // wajib dikirim
     };
 
     try {
@@ -103,7 +106,6 @@ const UpdateRajutan = () => {
         <Form onSubmit={handleSubmit} className="px-4 py-4 fade-in" style={{ backgroundColor: 'rgba(255, 255, 255, 0.0)' }}>
           <Row>
             <Col md={5} className="text-center">
-              {/* Gambar Preview Kotak */}
               <Form.Group className="mb-3 fade-in">
                 <Form.Label className="ghibli-label">Ganti Gambar</Form.Label>
                 <ImageUploaderWithCrop setImageUrl={setUrlGambar} />
@@ -140,7 +142,6 @@ const UpdateRajutan = () => {
                 </div>
               </Form.Group>
 
-              {/* Like & Favorite (non-editable) */}
               <div className="d-flex justify-content-center gap-4 mb-4">
                 <div className="d-flex align-items-center text-danger fw-semibold">
                   <BsHeart className="me-1" /> {countLike}
@@ -153,13 +154,17 @@ const UpdateRajutan = () => {
               <Form.Group className="mb-3 fade-in">
                 <Form.Label className="ghibli-label">Harga (Rp)</Form.Label>
                 <Form.Control
-                  type="number"
+                  type="text"
                   value={price}
-                  onChange={(e) => setPrice(e.target.value)}
-                  min="0"
+                  onChange={(e) => {
+                    const val = e.target.value;
+                    if (/^\d{0,10}$/.test(val)) setPrice(val);
+                  }}
                   required
+                  inputMode="numeric"
                 />
               </Form.Group>
+
 
               <Form.Group className="mb-3 fade-in">
                 <Form.Label className="ghibli-label">Status</Form.Label>
@@ -308,6 +313,16 @@ const UpdateRajutan = () => {
                   rows={6}
                   value={deskripsi}
                   onChange={(e) => setDeskripsi(e.target.value)}
+                />
+              </Form.Group>
+
+              <Form.Group className="mb-3 fade-in">
+                <Form.Label className="ghibli-label">Nama Pengrajin</Form.Label>
+                <Form.Control
+                  type="text"
+                  value={pengrajin}
+                  onChange={(e) => setPengrajin(e.target.value)}
+                  placeholder="Nama pengrajin"
                 />
               </Form.Group>
 

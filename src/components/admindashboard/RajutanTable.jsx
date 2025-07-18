@@ -131,17 +131,17 @@ const RajutanTable = ({ items, onDelete, onToggleStatus, loadingItemId }) => {
                       <div className="d-flex flex-column" style={{ minWidth: 50 }}>
                         <div
                           className="fw-semibold"
-                          style={{ cursor: 'pointer', color: '#495057' }}
+                          style={{ cursor: 'pointer', color: '#495057', fontSize: '1rem' }}
                           onClick={() => navigate(`/admin-dashboard/rajutan/detail/${item.id}`)}
                           onMouseEnter={(e) => (e.currentTarget.style.color = '#198754')}
                           onMouseLeave={(e) => (e.currentTarget.style.color = '#495057')}
                         >
                           {item.nama}
                         </div>
-                        <div className="text-muted">{typeName}</div>
+                        <div className="text-muted" style={{fontSize: '0.5rem'}}>{typeName}</div>
                       </div>
                       <div className="d-flex flex-column align-items-start" style={{ minWidth: 60 }}>
-                        <div>Rp {item.price.toLocaleString()}</div>
+                        <div style={{fontSize: '0.8rem'}} >Rp {item.price.toLocaleString()}</div>
                         <div className="d-flex gap-1">
                           <span>❤️ {item.count_like}</span>
                           <span>⭐ {item.count_favorite}</span>
