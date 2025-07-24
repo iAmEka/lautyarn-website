@@ -234,6 +234,15 @@ const Store = ({ user }) => {
                     <option value="favorite_desc">Besar ke Kecil</option>
                   </select>
                 </div>
+                <hr style={{ 
+                  margin: '1rem 0',
+                  height: '5px', 
+                  color: '#000000',       // Ketebalan garis
+                  backgroundColor: '#000000', // Warna garis
+                  border: 'none'        // Menghapus border default
+                }} />
+
+
 
                 {/* Filter status */}
                 <div className="mb-2">
